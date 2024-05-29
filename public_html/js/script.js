@@ -77,7 +77,7 @@ $(document).ready(function () {
     let path = window.location.pathname;
     let page = path.split("/").pop();
     if ($("#cursor").length === 0) {
-      $("body").append('<div id="cursor" class="cursor"></div>');
+      loadCursor();
     }
 
     if (page === "index.html" || page === "") {
@@ -91,6 +91,18 @@ $(document).ready(function () {
     if (page === "game.html") {
       loadGame();
     }
+  }
+  // cursor
+  function loadCursor() {
+    $("body").append(`
+      <div id="cursor" class="cursor">
+        <svg viewBox="140 140 120 120" xmlns="http://www.w3.org/2000/svg">
+          <ellipse class="cursor-ellipse" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); fill-opacity: 0.57; stroke-width: 8px;" cx="200" cy="200" rx="53.219" ry="53.219"/>
+          <line style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-width: 8px;" x1="200" y1="195.739" x2="200" y2="204.261"/>
+          <line style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-width: 8px;" x1="204.261" y1="200" x2="195.739" y2="200"/>
+        </svg>
+      </div>
+    `);
   }
   // navbar
   function loadNavbar(type = 0) {
@@ -303,28 +315,29 @@ $(document).ready(function () {
 
     $("button, a").hover(
       function () {
-        $("#cursor").css("transform", "scale(2) translate(-50%, -50%)");
-        $("#cursor").css("transform-origin", "left top");
+        $("#cursor").css({
+          "transform": "scale(2.2) translate(-50%, -50%)",
+          "transform-origin": "left top",
+          "transition": "transform 0.2s ease-in-out",
+        });
 
-        $("#cursor").css("transition", "transform 0.2s ease-in-out");
-        $(this).css("cursor", "none");
+        // $(this).css("cursor", "none");
       },
       function () {
-        $("#cursor").css("transform", "scale(1) translate(-50%, -50%)");
-        $("#cursor").css("transform-origin", "left top");
-        $(this).css("cursor", "none");
+        $("#cursor").css({
+          "transform": "scale(1) translate(-50%, -50%)",
+          "transform-origin": "left top",
+          "transition": "transform 0.2s ease-in-out",
+        });
+        // $(this).css("cursor", "none");
       }
     );
-    $("button, a").on("mousedown",
-      function () {
-        $("#cursor").css("transform", "scale(1.8) translate(-50%, -50%)");
-        $("#cursor").css("transform-origin", "left top");
+    $("button, a").on("mousedown", function () {
+      $("#cursor").css("transform", "scale(1.8) translate(-50%, -50%)");
+      $("#cursor").css("transform-origin", "left top");
 
-        $("#cursor").css("transition", "transform 0.2s ease-in-out");
-        $(this).css("cursor", "none");
-      }
-    );
-
-
+      $("#cursor").css("transition", "transform 0.2s ease-in-out");
+      // $(this).css("cursor", "none");
+    });
   }
 });

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="140 140 120 120" xmlns="http://www.w3.org/2000/svg">
+  <ellipse class="cursor-ellipse" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); fill-opacity: 0.57; stroke-width: 8px;" cx="200" cy="200" rx="53.219" ry="53.219"/>
+  <line style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-width: 8px;" x1="200" y1="195.739" x2="200" y2="204.261"/>
+  <line style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-width: 8px;" x1="204.261" y1="200" x2="195.739" y2="200"/>
+</svg>
