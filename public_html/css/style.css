@@ -1,0 +1,168 @@
+@font-face {
+  font-family: Gotham-Black;
+  src: url("../fonts/Gotham/Gotham-Black.otf");
+}
+
+@font-face {
+  font-family: Gotham-Bold;
+  src: url("../fonts/Gotham/Gotham-Bold.otf");
+}
+
+@font-face {
+  font-family: Gotham-Book;
+  src: url("../fonts/Gotham/Gotham-Book.otf");
+}
+
+@font-face {
+  font-family: Gotham-Light;
+  src: url("../fonts/Gotham/Gotham-Light.otf");
+}
+
+@font-face {
+  font-family: Gotham-Medium;
+  src: url("../fonts/Gotham/Gotham-Medium.otf");
+}
+
+@font-face {
+  font-family: Gotham-Thin;
+  src: url("../fonts/Gotham/Gotham-Thin.otf");
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Gotham-Thin;
+}
+
+body,
+html {
+  font-family: Gotham-Book;
+  cursor: none;
+}
+
+/* navbar */
+#navbar-section .navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  transition: background-color 0.3s, color 0.3s;
+  z-index: 1000;
+}
+
+.jumbotron {
+  background-image: url("../img/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  /* width: 100%; */
+  position: relative;
+  z-index: 0;
+}
+
+.main-header {
+  text-shadow: 1px 1px #3798ff, 2px 2px #a8d2ff;
+  font-size: calc(2.5em + 3vw);
+}
+
+.sub-header {
+  text-shadow: 1px 1px #3798ff, 2px 2px #a8d2ff;
+  font-size: calc(1.8em + 2.5vw);
+}
+/* cursor */
+#cursor {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  background: url("../cursor.svg");
+  background-size: contain;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transform-origin: left top;
+  
+}
+
+/* scroll bar */
+/* Width and Height */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* TABLET  */
+@media only screen and (min-width: 481px) and (max-width: 960px) {
+  #game-content {
+    gap: 50px;
+  }
+
+  #model-content {
+    gap: 5px;
+  }
+
+  #resume-section {
+    flex-direction: column;
+  }
+
+  #resume-section .resume {
+    width: 100%;
+  }
+}
+
+/* DESKTOP */
+@media only screen and (min-width: 961px) {
+  #game-content {
+    gap: 50px;
+  }
+
+  #model-content {
+    gap: 5px;
+  }
+
+  #resume-section {
+    flex-direction: row;
+  }
+
+  #resume-section .resume {
+    width: 50%;
+  }
+}
+
+/* MOBILE */
+@media only screen and (max-width: 480px) {
+  #game-content {
+    gap: 50px;
+  }
+
+  #model-content {
+    gap: 5px;
+  }
+
+  #resume-section {
+    flex-direction: column;
+  }
+
+  #resume-section .resume {
+    width: 100%;
+  }
+}
