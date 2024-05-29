@@ -97,7 +97,7 @@ $(document).ready(function () {
     $("body").append(`
       <div id="cursor" class="cursor">
         <svg viewBox="140 140 120 120" xmlns="http://www.w3.org/2000/svg">
-          <ellipse class="cursor-ellipse" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); fill-opacity: 0.57; stroke-width: 8px;" cx="200" cy="200" rx="53.219" ry="53.219"/>
+          <ellipse id="cursor-ellipse" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); fill-opacity: 0.57; stroke-width: 8px;" cx="200" cy="200" rx="53.219" ry="53.219"/>
           <line id="cursor-line1" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-width: 8px;" x1="200" y1="195.739" x2="200" y2="204.261"/>
           <line id="cursor-line2" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-width: 8px;" x1="204.261" y1="200" x2="195.739" y2="200"/>
         </svg>
@@ -321,21 +321,37 @@ $(document).ready(function () {
           "transition": "transform 0.2s ease-in-out",
         });
 
-        $("#cursor .cursor-ellipse, #cursor-line1, #cursor-line2").css({
+        $("#cursor #cursor-ellipse, #cursor-line1, #cursor-line2").css({
           "stroke-width": "3px",
           "transition": "stroke-width 0.2s ease-in-out",
         });
 
-        $("#cursor #cursor-line1").attr({
-          "y1": `${parseFloat($("#cursor-line1").attr("y1")) - 20}`,
-          "y2": `${parseFloat($("#cursor-line1").attr("y2")) + 20}`
+        gsap.to("#cursor-elipse", {
+          duration: 0.2,
+          attr: {
+            fill: "rgb(0, 0, 0)",
+          },
+          ease: "power2.out",
         });
 
-        $("#cursor #cursor-line2").attr({
-          "x1": `${parseFloat($("#cursor-line2").attr("x1")) + 20}`,
-          "x2": `${parseFloat($("#cursor-line2").attr("x2")) - 20}`
+        gsap.to("#cursor-line1", {
+          duration: 0.2,
+          attr: {
+            y1: parseFloat($("#cursor-line1").attr("y1")) - 20,
+            y2: parseFloat($("#cursor-line1").attr("y2")) + 20,
+          },
+          ease: "power2.out",
         });
-        // $(this).css("cursor", "none");
+
+        gsap.to("#cursor-line2", {
+          duration: 0.2,
+          attr: {
+            x1: parseFloat($("#cursor-line2").attr("x1")) + 20,
+            x2: parseFloat($("#cursor-line2").attr("x2")) - 20,
+          },
+          ease: "power2.out",
+        });
+        $(this).css("cursor", "none");
       },
 
       function () {
@@ -344,21 +360,29 @@ $(document).ready(function () {
           "transform-origin": "left top",
           "transition": "transform 0.2s ease-in-out",
         });
-        $("#cursor .cursor-ellipse, #cursor-line1, #cursor-line2").css({
+        $("#cursor #cursor-ellipse, #cursor-line1, #cursor-line2").css({
           "stroke-width": "8px",
           "transition": "stroke-width 0.2s ease-in-out",
         });
 
-        $("#cursor #cursor-line1").attr({
-          "y1": `${parseFloat($("#cursor-line1").attr("y1")) + 20}`,
-          "y2": `${parseFloat($("#cursor-line1").attr("y2")) - 20}`
+        gsap.to("#cursor-line1", {
+          duration: 0.2,
+          attr: {
+            y1: parseFloat($("#cursor-line1").attr("y1")) + 20,
+            y2: parseFloat($("#cursor-line1").attr("y2")) - 20,
+          },
+          ease: "power2.out",
         });
 
-        $("#cursor #cursor-line2").attr({
-          "x1": `${parseFloat($("#cursor-line2").attr("x1")) - 20}`,
-          "x2": `${parseFloat($("#cursor-line2").attr("x2")) + 20}`
+        gsap.to("#cursor-line2", {
+          duration: 0.2,
+          attr: {
+            x1: parseFloat($("#cursor-line2").attr("x1")) - 20,
+            x2: parseFloat($("#cursor-line2").attr("x2")) + 20,
+          },
+          ease: "power2.out",
         });
-        // $(this).css("cursor", "none");
+        $(this).css("cursor", "none");
       }
     );
     $("button, a").on("mousedown", function () {
@@ -366,7 +390,7 @@ $(document).ready(function () {
       $("#cursor").css("transform-origin", "left top");
 
       $("#cursor").css("transition", "transform 0.2s ease-in-out");
-      // $(this).css("cursor", "none");
+      $(this).css("cursor", "none");
     });
   }
 });
