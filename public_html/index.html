@@ -24,11 +24,14 @@
     <meta name="theme-color" content="#ffffff" />
   </head>
   <body>
+    <div id="loading-overlay">
+      <div id="loading-circle"></div>
+    </div>
     <div id="wrap" class="container-fluid">
       <header class="row" style="min-height: 10vh"></header>
       <main class="row flex-column align-items-center" style="gap: 10vh">
         <!-- Hero Content -->
-        <div class="col-md-12" style="height: 90vh">
+        <div class="section col-md-12" style="height: 90vh">
           <div
             class="jumbotron jumbotron-fluid row flex-column justify-content-center align-items-center mx-1 my-2"
             id="hero-section"
@@ -43,10 +46,10 @@
           </div>
         </div>
         <!-- About Me -->
-        <div class="col-md-11" style="min-height: 100vh">
+        <div class="section col-md-12" style="min-height: 100vh">
           <div class="row flex-column" id="about-section" style="height: 100vh">
             <div>
-              <h1 class="display-4 text-right mx-5 sub-header">Who am I?</h1>
+              <h1 class="display-4 text-right mx-5 pt-5 sub-header">Who am I?</h1>
             </div>
             <div
               class="row flex-row justify-content-around align-items-start mx-0 my-0"
@@ -82,10 +85,10 @@
         <!-- About Me -->
 
         <!-- Game Projects -->
-        <div class="col-md-11" style="min-height: 100vh">
+        <div class="section col-md-12" style="min-height: 100vh">
           <div class="row flex-column" id="game-section" style="height: 100vh">
             <div>
-              <h1 class="display-4 text-right mx-5 sub-header">Game</h1>
+              <h1 class="display-4 text-right mx-5 pt-5 sub-header">Game</h1>
             </div>
             <div
               class="row flex-row justify-content-around align-items-start mx-0 my-0"
@@ -263,10 +266,10 @@
         <!-- Game Projects -->
 
         <!-- 3D Modeling -->
-        <div class="col-md-11" style="min-height: 100vh">
+        <div class="section col-md-12" style="min-height: 100vh">
           <div class="row flex-column" id="model-section" style="height: 100vh">
             <div>
-              <h1 class="display-4 text-right mx-5 sub-header">3D Modeling</h1>
+              <h1 class="display-4 text-right mx-5 pt-5 sub-header">3D Modeling</h1>
             </div>
             <div
               class="row flex-row justify-content-around align-items-start mx-0 my-0"
@@ -443,6 +446,9 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>
+</head>
     <!-- CUSTOM JS -->
     <script src="js/script.js"></script>
   </body>

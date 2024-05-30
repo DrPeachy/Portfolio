@@ -1,8 +1,42 @@
 $(document).ready(function () {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Function to set up ScrollTrigger for each section
+  function setupScrollTriggers() {
+    $('.section').each(function(index, section) {
+      const triggerElement = section;
+      const pinElement = section;
+
+      ScrollTrigger.create({
+        trigger: triggerElement,
+        pin: pinElement,
+        start: 'top 56',
+        end: '+=90%',
+        pinSpacing: false,
+        pin: true,
+        scrub: 1,
+        markers: true // Remove or set to false when done debugging
+      });
+    });
+  }
+
+  // Function to hide the loading overlay
+  function hideLoadingOverlay() {
+    gsap.to("#loading-overlay", {
+      duration: 1,
+      opacity: 0,
+      onComplete: function() {
+        $("#loading-overlay").remove();
+        $("body, html").css("overflow", "auto");
+      }
+    });
+  }
+
   // Load DOM
   detectAndLoad();
   loadFooter();
   cursorControl();
+  setupScrollTriggers();
 
   // Set children under main to invisible
   $("main").children().css({
@@ -92,6 +126,12 @@ $(document).ready(function () {
       loadGame();
     }
   }
+
+  // Hide loading overlay after everything is loaded
+  $(window).on('load', function() {
+    hideLoadingOverlay();
+  });
+
   // cursor
   function loadCursor() {
     $("body").append(`
@@ -219,7 +259,7 @@ $(document).ready(function () {
     const imageTags = Object.entries(imageFilenameMap).map(
       ([keyword, link]) => {
         let tags = "";
-        tags += `<div class="row flex-column justify-content-center col-md-11 px-0" style="height: auto" id="game-${keyword}">`;
+        tags += `<div class="section row flex-column justify-content-center col-md-11 px-0" style="height: auto" id="game-${keyword}">`;
         tags += ` <h2 class="text-center sub-header">${keyToTitle[keyword]}</h2>`;
         tags += ` <div class="row flex-row justify-content-center">`;
         tags += `   <img class="col-md-4" src="img/games/${keyword}.jpg" alt="${keyword}">`;
@@ -266,7 +306,7 @@ $(document).ready(function () {
         tags += ` <h2 class="text-center sub-header">${keyToTitle[keyword]}</h2>`;
         tags += ` <p class="lead text-center" style="font-size: calc(1em + 1vw)">${keyToDescription[keyword]}</p>`;
         for (let i = 1; i <= number; i++) {
-          tags += ` <img style="height: auto; width: auto; object-fit: contain;" src="img/models/${keyword}_${i}.jpg" alt="${keyword} ${i}">`;
+          tags += ` <img class="section" style="height: auto; width: auto; object-fit: contain;" src="img/models/${keyword}_${i}.jpg" alt="${keyword} ${i}">`;
         }
         tags += `</div>`;
         return tags;
@@ -302,7 +342,7 @@ $(document).ready(function () {
   }
 
   //==========cursor===========
-  function cursorControl() {
+  function cursorControl(lineChange = 20) {
     $(document).mousemove(function (e) {
       const cursor = $("#cursor");
       const pageX = e.clientX;
@@ -314,6 +354,7 @@ $(document).ready(function () {
     });
 
     $("button, a").hover(
+      // Mouse in
       function () {
         $("#cursor").css({
           "transform": "scale(2.2) translate(-50%, -50%)",
@@ -326,19 +367,17 @@ $(document).ready(function () {
           "transition": "stroke-width 0.2s ease-in-out",
         });
 
-        gsap.to("#cursor-elipse", {
+        gsap.to("#cursor-ellipse", {
           duration: 0.2,
-          attr: {
-            fill: "rgb(0, 0, 0)",
-          },
+          fill: "rgb(55, 152, 255)",
           ease: "power2.out",
         });
 
         gsap.to("#cursor-line1", {
           duration: 0.2,
           attr: {
-            y1: parseFloat($("#cursor-line1").attr("y1")) - 20,
-            y2: parseFloat($("#cursor-line1").attr("y2")) + 20,
+            y1: 195.739 - lineChange,
+            y2: 204.261 + lineChange,
           },
           ease: "power2.out",
         });
@@ -346,14 +385,14 @@ $(document).ready(function () {
         gsap.to("#cursor-line2", {
           duration: 0.2,
           attr: {
-            x1: parseFloat($("#cursor-line2").attr("x1")) + 20,
-            x2: parseFloat($("#cursor-line2").attr("x2")) - 20,
+            x1: 204.261 + lineChange,
+            x2: 195.739 - lineChange,
           },
           ease: "power2.out",
         });
         $(this).css("cursor", "none");
       },
-
+      // Mouse out
       function () {
         $("#cursor").css({
           "transform": "scale(1) translate(-50%, -50%)",
@@ -365,11 +404,17 @@ $(document).ready(function () {
           "transition": "stroke-width 0.2s ease-in-out",
         });
 
+        gsap.to("#cursor-ellipse", {
+          duration: 0.2,
+          fill: "rgb(216, 216, 216)",
+          ease: "power2.out",
+        });
+
         gsap.to("#cursor-line1", {
           duration: 0.2,
           attr: {
-            y1: parseFloat($("#cursor-line1").attr("y1")) + 20,
-            y2: parseFloat($("#cursor-line1").attr("y2")) - 20,
+            y1: 195.739,
+            y2: 204.261,
           },
           ease: "power2.out",
         });
@@ -377,8 +422,8 @@ $(document).ready(function () {
         gsap.to("#cursor-line2", {
           duration: 0.2,
           attr: {
-            x1: parseFloat($("#cursor-line2").attr("x1")) - 20,
-            x2: parseFloat($("#cursor-line2").attr("x2")) + 20,
+            x1: 204.261,
+            x2: 195.739,
           },
           ease: "power2.out",
         });
