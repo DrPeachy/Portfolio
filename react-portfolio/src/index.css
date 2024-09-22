@@ -1,67 +1,54 @@
 @font-face {
   font-family: Gotham-Black;
-  src: url("../fonts/Gotham/Gotham-Black.otf");
+  src: url("./fonts/Gotham/Gotham-Black.otf");
 }
 
 @font-face {
   font-family: Gotham-Bold;
-  src: url("../fonts/Gotham/Gotham-Bold.otf");
+  src: url("./fonts/Gotham/Gotham-Bold.otf");
 }
 
 @font-face {
   font-family: Gotham-Book;
-  src: url("../fonts/Gotham/Gotham-Book.otf");
+  src: url("./fonts/Gotham/Gotham-Book.otf");
 }
 
 @font-face {
   font-family: Gotham-Light;
-  src: url("../fonts/Gotham/Gotham-Light.otf");
+  src: url("./fonts/Gotham/Gotham-Light.otf");
 }
 
 @font-face {
   font-family: Gotham-Medium;
-  src: url("../fonts/Gotham/Gotham-Medium.otf");
+  src: url("./fonts/Gotham/Gotham-Medium.otf");
 }
 
 @font-face {
   font-family: Gotham-Thin;
-  src: url("../fonts/Gotham/Gotham-Thin.otf");
+  src: url("./fonts/Gotham/Gotham-Thin.otf");
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: Gotham-Thin;
+@font-face {
+  font-family: Gotham-Ultra;
+  src: url("./fonts/Gotham/Gotham-Ultra.otf");
 }
 
-body,
-html {
-  font-family: Gotham-Book;
-  cursor: none;
-}
-/* loading */
-/* #loading-overlay {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(26, 24, 24);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+
+/* 适用于标题元素的字体覆盖 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: Gotham-Thin, sans-serif !important;
 }
 
-#loading-circle {
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
-} */
+/* 覆盖全局的 body 和 html 字体 */
+body, html {
+  font-family: Gotham-Book, sans-serif !important;
+  cursor: none !important;
+  margin-top: 50px;
+}
+
+button:hover, a:hover {
+  cursor: none !important;
+}
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -69,16 +56,28 @@ html {
 }
 
 /* navbar */
+/* 覆盖导航栏的品牌名称字体 */
+.navbar-brand {
+  font-family: Gotham-Book, sans-serif !important;
+  font-size: 24px !important;
+}
+
+/* 覆盖导航栏链接的字体 */
+.nav-link {
+  font-family: Gotham-Light, sans-serif !important;
+  font-size: 18px !important; /* 根据需要修改颜色 */
+  transition: none !important; /* Disable Bootstrap's transitions */
+}
+
 #navbar-section .navbar {
   position: fixed;
   top: 0;
   width: 100%;
-  transition: background-color 0.3s, color 0.3s;
   z-index: 1000;
 }
 
 .jumbotron {
-  background-image: url("../img/hero.jpg");
+  background-image: url("./img/hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -113,9 +112,11 @@ html {
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transform-origin: left top;
+  transform-origin: center center;
   
 }
+
+
 
 /* scroll bar */
 /* Width and Height */
@@ -406,3 +407,6 @@ html {
   opacity: 1;
   transition: opacity .5s ease;
 }
+
+
+

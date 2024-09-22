@@ -1,42 +1,42 @@
 $(document).ready(function () {
-  gsap.registerPlugin(ScrollTrigger);
+  // gsap.registerPlugin(ScrollTrigger);
 
   // Function to set up ScrollTrigger for each section
-  function setupScrollTriggers() {
-    $('.section').each(function(index, section) {
-      const triggerElement = section;
-      const pinElement = section;
+  // function setupScrollTriggers() {
+  //   $('.section').each(function(index, section) {
+  //     const triggerElement = section;
+  //     const pinElement = section;
 
-      ScrollTrigger.create({
-        trigger: triggerElement,
-        pin: pinElement,
-        start: 'top 56',
-        end: '+=90%',
-        pinSpacing: false,
-        pin: true,
-        scrub: 1,
-        markers: true // Remove or set to false when done debugging
-      });
-    });
-  }
+  //     ScrollTrigger.create({
+  //       trigger: triggerElement,
+  //       pin: pinElement,
+  //       start: 'top 56',
+  //       end: '+=90%',
+  //       pinSpacing: false,
+  //       pin: true,
+  //       scrub: 1,
+  //       markers: true // Remove or set to false when done debugging
+  //     });
+  //   });
+  // }
 
   // Function to hide the loading overlay
-  function hideLoadingOverlay() {
-    gsap.to("#loading-overlay", {
-      duration: 1,
-      opacity: 0,
-      onComplete: function() {
-        $("#loading-overlay").remove();
-        $("body, html").css("overflow", "auto");
-      }
-    });
-  }
+  // function hideLoadingOverlay() {
+  //   gsap.to("#loading-overlay", {
+  //     duration: 1,
+  //     opacity: 0,
+  //     onComplete: function() {
+  //       $("#loading-overlay").remove();
+  //       $("body, html").css("overflow", "auto");
+  //     }
+  //   });
+  // }
 
   // Load DOM
   detectAndLoad();
   loadFooter();
   cursorControl();
-  setupScrollTriggers();
+  // setupScrollTriggers();
 
   // Set children under main to invisible
   $("main").children().css({
@@ -128,9 +128,15 @@ $(document).ready(function () {
   }
 
   // Hide loading overlay after everything is loaded
-  $(window).on('load', function() {
-    hideLoadingOverlay();
-  });
+  // $(window).on('load', function () {
+  //   if (!sessionStorage.getItem('pageLoaded')) {
+  //     sessionStorage.setItem('pageLoaded', 'true');
+  //     hideLoadingOverlay();
+  //   } else {
+  //     $("#loading-overlay").remove();
+  //   }
+  // });
+  
 
   // cursor
   function loadCursor() {
