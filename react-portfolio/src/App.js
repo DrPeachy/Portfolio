@@ -7,6 +7,7 @@ import Home from './components/Home';
 import Game from './components/Game';
 import Model from './components/Model';
 import Resume from './components/Resume';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <div className="App">
         <MyNavbar />
         <Cursor />
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/me" element={<About />} />

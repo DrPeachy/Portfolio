@@ -149,6 +149,7 @@ const GameGallery = () => {
                   height: `${size}px`,
                   borderRadius: "50%",
                   border: "3px solid black",
+                  userSelect: "none",
                   objectFit: "cover",
                 }}
               />
