@@ -3,10 +3,11 @@ import { gsap } from "gsap";
 
 const Cursor = () => {
   const cursorRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false); // 用于记录是否处于 hover 状态
-  const [isClicked, setIsClicked] = useState(false); // 新增 isClicked 状态，防止动画冲突
+  const [isHovered, setIsHovered] = useState(false); // For hover state
+  const [isClicked, setIsClicked] = useState(false); // For click state
+  const [isOutside, setIsOutside] = useState(false); // New state for detecting when cursor is outside the page
 
-  // 用于更新光标位置
+  // Update cursor position
   const moveCursor = (e) => {
     const cursor = cursorRef.current;
     const { clientX: x, clientY: y } = e;
@@ -14,9 +15,9 @@ const Cursor = () => {
     cursor.style.top = `${y}px`;
   };
 
-  // 用于鼠标悬停的动画效果
+  // Handle cursor hover animations
   const hoverCursor = () => {
-    if (isClicked) return; // 如果正在点击状态，跳过 hover 动画
+    if (isClicked) return; // Skip hover animation if clicked
     setIsHovered(true);
     const cursor = cursorRef.current;
     gsap.to(cursor, {
@@ -42,9 +43,9 @@ const Cursor = () => {
     });
   };
 
-  // 用于鼠标离开的动画效果
+  // Handle cursor unhover animations
   const unhoverCursor = () => {
-    if (isClicked) return; // 如果正在点击状态，跳过 unhover 动画
+    if (isClicked) return; // Skip unhover animation if clicked
     setIsHovered(false);
     const cursor = cursorRef.current;
     gsap.to(cursor, {
@@ -70,33 +71,57 @@ const Cursor = () => {
     });
   };
 
-  // 用于点击时的动画效果
+  // Handle mouse down animations
   const mouseDown = () => {
-    setIsClicked(true); // 设置点击状态为 true
+    setIsClicked(true); // Set click state to true
     const cursor = cursorRef.current;
     gsap.to(cursor, {
-      scale: isHovered ? 1.8 : 0.8, // 如果是悬停状态则保持悬停的大小，否则变大
+      scale: isHovered ? 1.8 : 0.8, // If hovered, keep hover size, else shrink
       duration: 0.2,
       ease: "power2.out",
     });
   };
 
   const mouseUp = () => {
-    setIsClicked(false); // 恢复点击状态为 false
+    setIsClicked(false); // Reset click state
     const cursor = cursorRef.current;
     gsap.to(cursor, {
-      scale: isHovered ? 2.2 : 1, // 如果是悬停状态则保持悬停的大小，否则回到普通大小
+      scale: isHovered ? 2.2 : 1, // If hovered, return to hover size, else normal size
       duration: 0.2,
       ease: "power2.out",
     });
   };
 
-  // 监听鼠标移动和悬停事件
+  // Handle mouse leave (fade out)
+  const mouseLeave = () => {
+    setIsOutside(true); // Set outside state to true
+    const cursor = cursorRef.current;
+    gsap.to(cursor, {
+      opacity: 0, // Fade out
+      duration: 0.5,
+      ease: "power2.out",
+    });
+  };
+
+  // Handle mouse enter (fade in)
+  const mouseEnter = () => {
+    setIsOutside(false); // Reset outside state
+    const cursor = cursorRef.current;
+    gsap.to(cursor, {
+      opacity: 1, // Fade in
+      duration: 0.5,
+      ease: "power2.out",
+    });
+  };
+
+  // Add event listeners for mouse movement, click, and hover events
   useEffect(() => {
     const cursor = cursorRef.current;
     document.addEventListener("mousemove", moveCursor);
     document.addEventListener("mousedown", mouseDown);
     document.addEventListener("mouseup", mouseUp);
+    document.addEventListener("mouseleave", mouseLeave); // Add mouse leave event
+    document.addEventListener("mouseenter", mouseEnter); // Add mouse enter event
 
     const interactiveElements = document.querySelectorAll("a, button");
 
@@ -109,6 +134,8 @@ const Cursor = () => {
       document.removeEventListener("mousemove", moveCursor);
       document.removeEventListener("mousedown", mouseDown);
       document.removeEventListener("mouseup", mouseUp);
+      document.removeEventListener("mouseleave", mouseLeave); // Remove mouse leave event
+      document.removeEventListener("mouseenter", mouseEnter); // Remove mouse enter event
       interactiveElements.forEach((el) => {
         el.removeEventListener("mouseenter", hoverCursor);
         el.removeEventListener("mouseleave", unhoverCursor);
