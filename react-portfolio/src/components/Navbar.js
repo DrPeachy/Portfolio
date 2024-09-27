@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Navbar, Nav, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap'; // Import GSAP for animations
+import { MdKeyboardDoubleArrowDown, MdKeyboardDoubleArrowUp } from 'react-icons/md';
 
 const MyNavbar = () => {
 
@@ -43,7 +44,7 @@ const MyNavbar = () => {
             Charles' Realm
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarNav" className="navbar-toggler">
-            <i className="bi bi-chevron-double-down"></i>
+            <MdKeyboardDoubleArrowDown />
           </Navbar.Toggle>
           <Navbar.Collapse id="navbarNav">
             <Nav className="ml-auto">
