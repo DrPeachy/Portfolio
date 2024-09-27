@@ -44,10 +44,16 @@ body, html {
   font-family: Gotham-Book, sans-serif !important;
   cursor: none !important;
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 
-button:hover, a:hover {
+button:hover, a:hover, img:hover {
   cursor: none !important;
+}
+
+::selection {
+  background-color: #00050a !important; /* 自定义选区的背景色 */
+  color: #3798ff !important; /* 自定义选区的文本颜色 */
 }
 
 @keyframes spin {

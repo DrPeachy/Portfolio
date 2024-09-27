@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import FadeInScaleUpOnScroll from './FadeInScaleUpOnScroll';
 
-gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger with gsap
+// gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger with gsap
 
 const HeroSection = () => {
   const heroRef = useRef(null);
@@ -22,23 +22,33 @@ const HeroSection = () => {
       { scale: 1, opacity: 1, duration: 1.5, ease: 'power3.out' }
     );
 
-    // Animate the main header text
+    // Animate the main header text (initial entrance)
     tl.fromTo(
       headerRef.current,
       { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: 'power2.out' },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: 'power2.out'
+      },
       "-=1"
     );
 
-    // Animate sub-header text
+    // Animate the sub-header text (initial entrance)
     tl.fromTo(
       subHeaderRef.current,
       { y: -50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: 'power2.out' },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: 'power2.out'
+      },
       "-=1"
     );
 
-    // Animate the line
+    // Animate the line (initial entrance)
     tl.fromTo(
       lineRef.current,
       { scaleX: 0, opacity: 0 },
@@ -46,30 +56,12 @@ const HeroSection = () => {
       "-=0.8"
     );
 
-    // Animate the paragraph text
+    // Animate the paragraph text (initial entrance)
     tl.fromTo(
       paragraphRef.current,
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 1, ease: 'power2.out' },
-      "-=0.5"
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'power2.out' }
     );
-
-    // ScrollTrigger to fade and scale out hero section on scroll
-    ScrollTrigger.create({
-      trigger: heroRef.current,
-      start: "top top", // Start when the top of the hero hits the top of the viewport
-      end: "bottom top", // End when the bottom of the hero hits the top of the viewport
-      scrub: true, // Smooth animation linked to scroll progress
-      onUpdate: (self) => {
-        const progress = self.progress; // Progress is between 0 and 1
-        gsap.to(heroRef.current, {
-          opacity: 1 - progress,
-          scale: 1 - 0.2 * progress, // Shrinks as it fades out
-          ease: "power2.out",
-        });
-      },
-    });
-
   }, []);
 
   return (

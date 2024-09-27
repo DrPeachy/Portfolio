@@ -124,8 +124,8 @@ const Cursor = () => {
           style={{
             fill: "rgb(216, 216, 216)",
             stroke: "rgb(0, 0, 0)",
-            fillOpacity: 0.57,
-            strokeWidth: 8,
+            fillOpacity: 0.3,
+            strokeWidth: 6,
           }}
           cx="200"
           cy="200"
@@ -137,7 +137,7 @@ const Cursor = () => {
           style={{
             stroke: "rgb(0, 0, 0)",
             strokeLinecap: "round",
-            strokeWidth: 8,
+            strokeWidth: 5,
           }}
           x1="200"
           y1="195.739"
@@ -149,7 +149,7 @@ const Cursor = () => {
           style={{
             stroke: "rgb(0, 0, 0)",
             strokeLinecap: "round",
-            strokeWidth: 8,
+            strokeWidth: 5,
           }}
           x1="204.261"
           y1="200"

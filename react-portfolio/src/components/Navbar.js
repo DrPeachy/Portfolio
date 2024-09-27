@@ -37,8 +37,8 @@ const MyNavbar = () => {
 
   return (
     <div id="navbar-section">
-      <Navbar expand="xxl">
-        <Container>
+      <Navbar expand="xl">
+        <Container className="mx-5">
           <Navbar.Brand as={Link} to="/" className="navbar-brand">
             Charles' Realm
           </Navbar.Brand>
