@@ -2,15 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import './DraggableTags.css';
 
-const DraggableTags = ({ tags, colors, background, index ,textureUrl = "" }) => {
+const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width = 500, height = 350 }) => {
   const containerRef = useRef(null);
-  const MINDISTANCE = 0;
+  const MINDISTANCE = 80;
   let existingPoints = [];
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // const { width, height } = containerRef.current.getBoundingClientRect();
     const groups = document.querySelectorAll(`.blob-group-${index}`);
 
     groups.forEach((group, i) => {
@@ -85,11 +84,6 @@ const DraggableTags = ({ tags, colors, background, index ,textureUrl = "" }) => 
               // Determine circle radius based on tag length
               const radius = Math.max(20, Math.min(tag.length * 8, 80)); // Set radius between 20 and 80 based on tag length
 
-              // Check if containerRef is available and get width and height, otherwise use default values
-              const { width = 600, height = 600 } = containerRef.current
-                ? containerRef.current.getBoundingClientRect()
-                : {};
-
               // Calculate random positions within the container dimensions until far enough from existing points, adjusted by radius to keep circles inside
               let cx, cy;
               do {
@@ -127,7 +121,7 @@ const DraggableTags = ({ tags, colors, background, index ,textureUrl = "" }) => 
             })}
           </g>
         </mask>
-        <rect x="0" y="0" mask="url(#maska)" fill="url(#MyGradient)" width="100%" height="100%" />
+        <rect x="0" y="0" mask="url(#maska)" fill="url(#MyGradient)" width={width} height={height} />
       </svg>
     </div>
   );

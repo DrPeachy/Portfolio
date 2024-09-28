@@ -92,11 +92,11 @@ const Game = () => {
               </FadeInScaleUpOnScroll>
             </Col>
 
-            <Col md={5} className="d-flex flex-column justify-content-center" >
+            <Col md={5} className="d-flex flex-column justify-content-center" style={{height:'400px'}} >
               <FadeInScaleUpOnScroll start="top 5%">
-                <a href={gameInfo.link} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark">
+                {/* <a href={gameInfo.link} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark">
                   Play
-                </a>
+                </a> */}
                 <DraggableTags tags={gameInfo.tags} index={index} colors={['#444444', '#222222']} />
               </FadeInScaleUpOnScroll>
             </Col>
