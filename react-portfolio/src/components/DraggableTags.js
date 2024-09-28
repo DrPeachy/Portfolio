@@ -10,30 +10,25 @@ const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const groups = document.querySelectorAll(`.blob-group-${index}`);
+    const groups = containerRef.current.querySelectorAll(`.blob-group-${index}`);
 
     groups.forEach((group, i) => {
-      const startRotation = i * 90;
-      const endRotation = i * 90 + 360;
-
       gsap.fromTo(
         group,
         {
-          attr: {
-            transform: `rotate(${startRotation}) translate(8, 0.1) rotate(${-startRotation})`
-          }
+          rotation: 0,
         },
         {
-          duration: 4,
-          attr: {
-            transform: `rotate(${endRotation}) translate(8, 0.1) rotate(${-endRotation})`
-          },
-          ease: 'none',
-          repeat: -1
+          rotation: gsap.utils.random(-360, 360),
+          transformOrigin: "center center",
+          duration: gsap.utils.random(12, 16),
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true
         }
       );
     });
-  }, [tags]);
+  }, [tags, index]);
 
   // Utility function to get a random number in a range
   const getRandomInRange = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -41,7 +36,7 @@ const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width
   // Utility function to get a random item from an array
   const getRandomItemFromArray = (array) => array[Math.floor(Math.random() * array.length)];
 
-  // Unility function to check if distance between two points is less than a given value
+  // Utility function to check if distance between two points is less than a given value
   const isClose = (x1, y1, x2, y2, distance) => Math.hypot(x2 - x1, y2 - y1) < distance;
 
   return (
@@ -60,9 +55,9 @@ const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width
           }}
         ></div>
       )}
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" id="loader">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" id={`loader-${index}`} width={width} height={height}>
         <defs>
-          <filter id="goo">
+          <filter id={'goo'}>
             <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10" />
             <feColorMatrix
               in="blur"
@@ -72,15 +67,15 @@ const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width
             />
             <feBlend in2="goo" in="SourceGraphic" result="mix" />
           </filter>
-          <linearGradient id="MyGradient">
+          <linearGradient id={`MyGradient-${index}`}>
             <stop offset="5%" stopColor="#40204c" />
             <stop offset="40%" stopColor="#a3225c" />
             <stop offset="100%" stopColor="#e24926" />
           </linearGradient>
         </defs>
-        <mask id="maska">
+        <mask id={`maska-${index}`}>
           <g className="blobs">
-            {tags.map((tag, index) => {
+            {tags.map((tag, i) => {
               // Determine circle radius based on tag length
               const radius = Math.max(20, Math.min(tag.length * 8, 80)); // Set radius between 20 and 80 based on tag length
 
@@ -97,17 +92,15 @@ const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width
               const color = getRandomItemFromArray(colors);
 
               return (
-                <g key={index} className={`blob-group-${index}`} transform="rotate(0) translate(0, 0) rotate(0)">
+                <g key={i} className={`blob-group-${index}`} style={{ transform: `translate(${cx}px, ${cy}px)` }}>
                   <circle
                     className="blob"
-                    cx={cx}
-                    cy={cy}
                     r={radius}
                     fill={color} // Random color from provided colors list
                   />
                   <text
-                    x={cx}
-                    y={cy}
+                    x="0"
+                    y="0"
                     textAnchor="middle"
                     dy=".3em"
                     fontSize={Math.min(radius / 2, 20)} // Font size relative to radius but with a max of 20
@@ -121,7 +114,7 @@ const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width
             })}
           </g>
         </mask>
-        <rect x="0" y="0" mask="url(#maska)" fill="url(#MyGradient)" width={width} height={height} />
+        <rect x="0" y="0" mask={`url(#maska-${index})`} fill={`url(#MyGradient-${index})`} width={width} height={height} />
       </svg>
     </div>
   );

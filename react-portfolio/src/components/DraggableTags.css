@@ -1,42 +1,40 @@
 /* 组件容器 */
 .loading_cont {
-    width: 100%;
-    height: 100vh; /* 高度设为视口高度 */
-    position: relative;
-    overflow: hidden; /* 限制内部的溢出 */
-  }
-  
-  /* 背景点纹理（可选） */
-  .loading_cont:before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background-size: contain;
-    opacity: 0.05;
-    z-index: 0;
-  }
-  
-  /* SVG 加载器 */
-  #loader {
-    display: inline-block;
-    position: absolute;
-    width: 800px;
-    height: 400px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  /* SVG 过滤器 */
-  rect {
-    transform-origin: 50% 50%;
-  }
-  
-  /* 使用滤镜的 blobs */
-  .blobs {
-    filter: url("#goo");
-  }
-  
+  width: 100%;
+  position: relative;
+  overflow: hidden; /* 限制内部的溢出 */
+}
+
+/* 背景点纹理（可选） */
+/* .loading_cont:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-size: contain;
+  opacity: 0.05;
+  z-index: 0;
+} */
+
+/* SVG 加载器 */
+#loader {
+  display: inline-block;
+  position: absolute;
+  width: 800px;
+  height: 400px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* SVG 过滤器 */
+rect {
+  transform-origin: 50% 50%;
+}
+
+/* 使用滤镜的 blobs */
+.blobs {
+  filter: url("#goo");
+}
