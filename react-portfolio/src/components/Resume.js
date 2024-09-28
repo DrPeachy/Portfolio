@@ -1,12 +1,12 @@
 import React from "react";
+import DraggableTags from "./DraggableTags";
+import { Container } from "react-bootstrap";
 
 const Resume = () => {
   return (
-    <div>
-      <h1>Resume</h1>
-      <p>Here is my resume.</p>
-      {/* 你可以在这里展示简历内容 */}
-    </div>
+    <Container>
+      <DraggableTags tags={["Unity", "Android", "Platformer", "Indie", "Chilling"]} colors={["rgba(100, 100, 100, 1)", "rgba(9,255,50,1)"]}/>
+    </Container>
   );
 };
 

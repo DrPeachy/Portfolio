@@ -8,6 +8,7 @@ import Game from './components/Game';
 import Model from './components/Model';
 import Resume from './components/Resume';
 import ScrollToTop from './components/ScrollToTop';
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/model" element={<Model />} />
           <Route path="/resume" element={<Resume />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

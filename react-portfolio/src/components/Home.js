@@ -9,15 +9,6 @@ const Home = () => {
   return (
     <div>
       <Hero />
-      <Container>
-        <Row>
-          <Col>
-            <FadeInScaleUpOnScroll>
-            <Image src={selfImage} alt="example" rounded />
-            </FadeInScaleUpOnScroll>
-          </Col>
-        </Row>
-      </Container>
     </div>
   );
 };

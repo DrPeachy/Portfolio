@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import FadeInScaleUpOnScroll from './FadeInScaleUpOnScroll';
+import DraggableTags from './DraggableTags';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
@@ -12,31 +13,31 @@ gsap.registerPlugin(ScrollTrigger);
 const gameData = {
   morph: {
     title: 'Morph',
-    description: 'Morph is a 2D platformer puzzle game I made in a team of 5 with Unity...',
+    tags: ['Unity', 'Platformer', 'Indie', 'Puzzle', 'Pixel'],
     link: 'https://1067838263.itch.io/morph',
     imageFileName: 'morph.jpg'
   },
   planet: {
     title: 'Procedural Planet',
-    description: 'Planet is a game(more like a toy) that I made with Unity...',
+    tags: ['Unity', 'Procedural', '3D', 'Simulation', 'Shader'],
     link: 'https://1067838263.itch.io/planet',
     imageFileName: 'planet.jpg'
   },
   knight: {
     title: 'Knight and Spear',
-    description: 'Knight and Spear is a 2D rogue-like game I made in a team of 3 with Unity...',
+    tags: ['Unity', 'PC', 'Pixel', '2D', 'Rogue-like'],
     link: 'https://bluetitanium.itch.io/knight-and-spear',
     imageFileName: 'knight.jpg'
   },
   tetris: {
     title: 'Tetris Rush',
-    description: 'Tetris Rush is a 2D puzzle game I made with a friend...',
+    tags: ['Unity', 'GameJam', 'Puzzle', 'Arcade', '3D'],
     link: 'https://1067838263.itch.io/tetrisrush',
     imageFileName: 'tetris.jpg'
   },
   seagull: {
     title: 'Seagull Express',
-    description: 'Seagull Express is a 2D topdown Android game I made in a team of 4...',
+    tags: ['Unity', 'Mobile', 'Delivery', 'Runner', '2D'],
     link: 'https://pyc23.itch.io/seagull-express',
     imageFileName: 'seagull.jpg'
   }
@@ -87,16 +88,16 @@ const Game = () => {
             <Col md={4} className="mb-4">
               {/* Apply fade-in and scale-up effect on scroll */}
               <FadeInScaleUpOnScroll start="top 5%">
-                <Image src={gameImages[gameInfo.imageFileName]} fluid alt={gameInfo.title} style={{ borderRadius: '5px' }} />
+                <Image src={gameImages[gameInfo.imageFileName]} fluid alt={gameInfo.title} style={{ borderRadius: '5px', boxShadow: '4px 4px 20px rgba(55, 152, 255, 0.4)' }} />
               </FadeInScaleUpOnScroll>
             </Col>
 
-            <Col md={5} className="d-flex flex-column justify-content-center">
+            <Col md={5} className="d-flex flex-column justify-content-center" >
               <FadeInScaleUpOnScroll start="top 5%">
-                <p className="lead">{gameInfo.description}</p>
                 <a href={gameInfo.link} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark">
                   Play
                 </a>
+                <DraggableTags tags={gameInfo.tags} index={index} colors={['#444444', '#222222']} />
               </FadeInScaleUpOnScroll>
             </Col>
           </Row>
