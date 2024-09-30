@@ -4,7 +4,15 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FadeInScaleUpOnScroll = ({ children, start = "top 20%", end = "bottom top", scaleStart = 0.8, scaleEnd = 1, duration = 0.2 }) => {
+const FadeInScaleUpOnScroll = ({
+  children,
+  start = "top 20%",
+  end = "bottom top",
+  scaleStart = 0.8,
+  scaleEnd = 1,
+  duration = 0.2,
+  style = {}, // Accepting style prop
+}) => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
@@ -40,10 +48,10 @@ const FadeInScaleUpOnScroll = ({ children, start = "top 20%", end = "bottom top"
         scrollTriggerInstance.kill(); // Properly kill the specific instance
       }
     };
-  }, [start, end, duration]);
+  }, [start, end, duration, scaleStart, scaleEnd]);
 
   return (
-    <div ref={sectionRef} className="fade-in-scale-up-section">
+    <div ref={sectionRef} className="fade-in-scale-up-section" style={{ ...style }}>
       {children}
     </div>
   );

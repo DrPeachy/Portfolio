@@ -123,7 +123,7 @@ const Cursor = () => {
     document.addEventListener("mouseleave", mouseLeave); // Add mouse leave event
     document.addEventListener("mouseenter", mouseEnter); // Add mouse enter event
 
-    const interactiveElements = document.querySelectorAll("a, button");
+    const interactiveElements = document.querySelectorAll("a, button, .clickable-layer");
 
     interactiveElements.forEach((el) => {
       el.addEventListener("mouseenter", hoverCursor);

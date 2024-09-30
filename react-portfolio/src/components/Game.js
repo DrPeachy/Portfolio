@@ -13,31 +13,31 @@ gsap.registerPlugin(ScrollTrigger);
 const gameData = {
   morph: {
     title: 'Morph',
-    tags: ['Unity', 'Platformer', 'Indie', 'Puzzle', 'Pixel'],
+    tags: ['Unity', 'PC', '2D', 'Platformer', 'Indie', 'Puzzle', 'Pixel', 'Physics'],
     link: 'https://1067838263.itch.io/morph',
     imageFileName: 'morph.jpg'
   },
   planet: {
     title: 'Procedural Planet',
-    tags: ['Unity', 'Procedural', '3D', 'Simulation', 'Shader'],
+    tags: ['Unity', 'PC', '3D', 'Procedural', 'Simulation', 'Shader', 'Noise', 'Terrain'],
     link: 'https://1067838263.itch.io/planet',
     imageFileName: 'planet.jpg'
   },
   knight: {
     title: 'Knight and Spear',
-    tags: ['Unity', 'PC', 'Pixel', '2D', 'Rogue-like'],
+    tags: ['Unity', 'PC', '2D', 'Pixel', 'RogueLike', 'Arena', 'Epic'],
     link: 'https://bluetitanium.itch.io/knight-and-spear',
     imageFileName: 'knight.jpg'
   },
   tetris: {
     title: 'Tetris Rush',
-    tags: ['Unity', 'GameJam', 'Puzzle', 'Arcade', '3D'],
+    tags: ['Unity', 'PC', '3D', 'GameJam', 'Puzzle', 'Arcade', 'LowPoly'],
     link: 'https://1067838263.itch.io/tetrisrush',
     imageFileName: 'tetris.jpg'
   },
   seagull: {
     title: 'Seagull Express',
-    tags: ['Unity', 'Mobile', 'Delivery', 'Runner', '2D'],
+    tags: ['Unity', 'Mobile', '2D', 'Delivery', 'Runner', 'Cartoon', 'Animals'],
     link: 'https://pyc23.itch.io/seagull-express',
     imageFileName: 'seagull.jpg'
   }
@@ -84,20 +84,31 @@ const Game = () => {
         <div key={index} className="game-section my-5">
           <h2 className="text-center my-4">{gameInfo.title}</h2>
 
-          <Row className="justify-content-center">
-            <Col md={4} className="mb-4">
+          <Row className="justify-content-center align-items-center">
+            <Col xl={2} className="justify-content-center ">
               {/* Apply fade-in and scale-up effect on scroll */}
-              <FadeInScaleUpOnScroll start="top 5%">
-                <Image src={gameImages[gameInfo.imageFileName]} fluid alt={gameInfo.title} style={{ borderRadius: '5px', boxShadow: '4px 4px 20px rgba(55, 152, 255, 0.4)' }} />
+              <FadeInScaleUpOnScroll
+                start="top 5%"
+                style={{
+                  maxWidth: 'auto',
+                }}
+              >
+                <Image src={gameImages[gameInfo.imageFileName]} fluid alt={gameInfo.title} style={{
+                  borderRadius: '55px',
+                  boxShadow: '4px 4px 20px rgba(55, 152, 255, 0.4)',
+                }} />
               </FadeInScaleUpOnScroll>
             </Col>
 
-            <Col md={5} className="d-flex flex-column justify-content-center" style={{height:'400px'}} >
-              <FadeInScaleUpOnScroll start="top 5%">
-                {/* <a href={gameInfo.link} target="_blank" rel="noopener noreferrer" className="btn btn-outline-dark">
-                  Play
-                </a> */}
-                <DraggableTags tags={gameInfo.tags} index={index} colors={['#444444', '#222222']} />
+            <Col xl={3} className="d-flex flex-column justify-content-center" >
+              <FadeInScaleUpOnScroll
+                start="top 5%"
+                style={{
+                  maxWidth: 'auto',
+                  PointerEvent: 'none',
+                }}
+              >
+                <DraggableTags tags={gameInfo.tags} index={index} colors={['#3495eb']} playLink={gameInfo.link} />
               </FadeInScaleUpOnScroll>
             </Col>
           </Row>

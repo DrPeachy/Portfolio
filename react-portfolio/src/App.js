@@ -9,6 +9,7 @@ import Model from './components/Model';
 import Resume from './components/Resume';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
+import GameDebugger from './components/GameDebugger';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <ScrollToTop />
         <MyNavbar />
         <Cursor />
+        <GameDebugger />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/me" element={<About />} />
