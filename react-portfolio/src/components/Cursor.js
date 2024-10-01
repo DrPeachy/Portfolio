@@ -122,6 +122,9 @@ const Cursor = () => {
     document.addEventListener("mouseup", mouseUp);
     document.addEventListener("mouseleave", mouseLeave); // Add mouse leave event
     document.addEventListener("mouseenter", mouseEnter); // Add mouse enter event
+    // add mouse leave and enter for pdf
+    document.querySelector("#resume-section")?.addEventListener("mouseenter", mouseLeave);
+    document.querySelector("#resume-section")?.addEventListener("mouseleave", mouseEnter);
 
     const interactiveElements = document.querySelectorAll("a, button, .clickable-layer");
 
@@ -136,6 +139,9 @@ const Cursor = () => {
       document.removeEventListener("mouseup", mouseUp);
       document.removeEventListener("mouseleave", mouseLeave); // Remove mouse leave event
       document.removeEventListener("mouseenter", mouseEnter); // Remove mouse enter event
+      // remove mouse leave for pdf
+      document.querySelector("#resume-section")?.removeEventListener("mouseenter", mouseLeave);
+      document.querySelector("#resume-section")?.removeEventListener("mouseleave", mouseEnter);
       interactiveElements.forEach((el) => {
         el.removeEventListener("mouseenter", hoverCursor);
         el.removeEventListener("mouseleave", unhoverCursor);
