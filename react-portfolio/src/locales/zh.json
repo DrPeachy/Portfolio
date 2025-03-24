@@ -1,14 +1,23 @@
 {
-    "navbar": {
-      "home": "首页",
-      "about": "关于我",
-      "game": "游戏",
-      "showcase": "作品展示",
-      "model": "3D 模型",
-      "resume": "简历"
-    },
-    "footer": {
-      "copyright": "© 2025 Charles Pan. 版权所有."
-    }
+  "navbar": {
+    "home": "首页",
+    "about": "关于我",
+    "game": "游戏",
+    "showcase": "作品展示",
+    "model": "3D 模型",
+    "resume": "简历"
+  },
+  "footer": {
+    "copyright": "© 2025 Charles Pan. 版权所有."
+  },
+  "home": {
+    "hero1": "你好，我是",
+    "hero2": "潘程",
+    "hero-sub": "这里是我的个人主页"
+  },
+  "about": {
+    "title": "我是潘程",
+    "content": "我是一名在读的计算机科学硕士生，专注于游戏开发。我热爱编程，喜欢尝试新技术。我喜欢游戏，喜欢设计游戏。我喜欢学习，喜欢分享。我擅长的技术栈有：Unity3D、Unreal、C#、C++、Python、MERN Stack等。"
   }
+}
   

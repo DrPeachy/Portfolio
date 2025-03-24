@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import FadeInScaleUpOnScroll from './FadeInScaleUpOnScroll';
+import { useTranslation } from 'react-i18next';
 
 // gsap.registerPlugin(ScrollTrigger); // Register ScrollTrigger with gsap
 
@@ -11,6 +12,10 @@ const HeroSection = () => {
   const subHeaderRef = useRef(null);
   const lineRef = useRef(null);
   const paragraphRef = useRef(null);
+
+  // localization
+  const { t, i18n } = useTranslation();
+
 
   useEffect(() => {
     const tl = gsap.timeline();
@@ -77,13 +82,13 @@ const HeroSection = () => {
             ref={subHeaderRef}
             className="display-4 text-center sub-header"
           >
-            Welcome to
+            {t("home.hero1")}
           </h1>
           <h1
             ref={headerRef}
             className="display-1 text-center main-header"
           >
-            Charles' Realm
+            {t("home.hero2")}
           </h1>
           <hr
             ref={lineRef}
@@ -95,7 +100,7 @@ const HeroSection = () => {
             className="lead text-center"
             style={{ fontSize: 'calc(1.2em + 1vw)' }}
           >
-            Everything you need to know about <b>me</b>
+            {t("home.hero-sub")}
           </p>
         </div>
       </div>

@@ -1,7 +1,11 @@
 import React from "react";
 import GameGallery from "./GameGallery";
 import { Container, Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+
 const About = () => {
+  const { t } = useTranslation();
+
   return (
     <Container fluid>
       <Row>
@@ -10,13 +14,11 @@ const About = () => {
         </Col>
 
         <Col xl={8}>
-          <h1 className="about-title">About Me</h1>
+          <h1 className="about-title">
+            {t("about.title")}
+          </h1>
           <p className="about-text">
-            I am a software engineer with a passion for game development. I have
-            experience with Unity, C#, and Java. I am also familiar with web
-            development technologies such as React, Node.js, and MongoDB. I am
-            currently seeking a full-time position in game development or
-            software engineering.
+            {t("about.content")}
           </p>
         </Col>
       </Row>

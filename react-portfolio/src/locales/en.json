@@ -1,14 +1,23 @@
 {
-    "navbar": {
-      "home": "Home",
-      "about": "About Me",
-      "game": "Game",
-      "showcase": "Showcase",
-      "model": "3D Models",
-      "resume": "Resume"
-    },
-    "footer": {
-      "copyright": "© 2025 Charles Pan. All Rights Reserved."
-    }
+  "navbar": {
+    "home": "Home",
+    "about": "About Me",
+    "game": "Game",
+    "showcase": "Showcase",
+    "model": "3D Models",
+    "resume": "Resume"
+  },
+  "footer": {
+    "copyright": "© 2025 Charles Pan. All Rights Reserved."
+  },
+  "home": {
+    "hero1" : "Welcome to",
+    "hero2" : "Charles' Portfolio",
+    "hero-sub" : "Everything you need to know about me"
+  },
+  "about": {
+    "title": "About Me",
+    "content": "I am a Computer Science Master's student with a focus on game development. I love coding and trying out new technologies. I love games and designing games. I love learning and sharing. My tech stack includes Unity3D, Unreal, C#, C++, Python, MERN Stack, etc."
   }
+}
   
