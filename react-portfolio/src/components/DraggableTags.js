@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import './DraggableTags.css';
+import { useTranslation } from 'react-i18next';
 
 const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width = 500, height = 470, playLink = "#" }) => {
   const containerRef = useRef(null);
   const MINDISTANCE = 70;
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -158,7 +160,7 @@ const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width
                     fontSize="22"
                     fill="#ffffff"
                   >
-                    play
+                    {t("game.play")}
                   </text>
                 </g>
               );

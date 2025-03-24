@@ -7,37 +7,28 @@ import FadeInScaleUpOnScroll from './FadeInScaleUpOnScroll';
 import DraggableTags from './DraggableTags';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTranslation } from 'react-i18next';
 gsap.registerPlugin(ScrollTrigger);
 
 // Game data, including image file names, links, titles, and descriptions
-const gameData = {
+const staticGameData = {
   morph: {
-    title: 'Morph',
-    tags: ['Unity', 'PC', '2D', 'Platformer', 'Indie', 'Puzzle', 'Pixel', 'Physics'],
     link: 'https://1067838263.itch.io/morph',
     imageFileName: 'morph.jpg'
   },
   planet: {
-    title: 'Procedural Planet',
-    tags: ['Unity', 'PC', '3D', 'Procedural', 'Simulation', 'Shader', 'Noise', 'Terrain'],
     link: 'https://1067838263.itch.io/planet',
     imageFileName: 'planet.jpg'
   },
   knight: {
-    title: 'Knight and Spear',
-    tags: ['Unity', 'PC', '2D', 'Pixel', 'RogueLike', 'Arena', 'Epic'],
     link: 'https://bluetitanium.itch.io/knight-and-spear',
     imageFileName: 'knight.jpg'
   },
   tetris: {
-    title: 'Tetris Rush',
-    tags: ['Unity', 'PC', '3D', 'GameJam', 'Puzzle', 'Arcade', 'LowPoly'],
     link: 'https://1067838263.itch.io/tetrisrush',
     imageFileName: 'tetris.jpg'
   },
   seagull: {
-    title: 'Seagull Express',
-    tags: ['Unity', 'Mobile', '2D', 'Delivery', 'Runner', 'Cartoon', 'Animals'],
     link: 'https://pyc23.itch.io/seagull-express',
     imageFileName: 'seagull.jpg'
   }
@@ -56,6 +47,16 @@ const gameImages = importAll(require.context('../img/games', false, /\.(png|jpe?
 
 const Game = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const { t } = useTranslation();
+
+  const gameData = Object.keys(staticGameData).reduce((acc, key) => {
+    acc[key] = {
+      ...staticGameData[key],
+      title: t(`game.gamedata.${key}.title`),
+      tags: t(`game.gamedata.${key}.tags`, { returnObjects: true })
+    };
+    return acc;
+  }, {});
 
   useEffect(() => {
     const imageElements = Object.keys(gameData).map((gameKey) => {

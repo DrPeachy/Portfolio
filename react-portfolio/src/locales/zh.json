@@ -7,17 +7,67 @@
     "model": "3D 模型",
     "resume": "简历"
   },
+
   "footer": {
     "copyright": "© 2025 Charles Pan. 版权所有."
   },
+
   "home": {
     "hero1": "你好，我是",
-    "hero2": "潘程",
+    "hero2": "潘 程",
     "hero-sub": "这里是我的个人主页"
   },
+
   "about": {
-    "title": "我是潘程",
-    "content": "我是一名在读的计算机科学硕士生，专注于游戏开发。我热爱编程，喜欢尝试新技术。我喜欢游戏，喜欢设计游戏。我喜欢学习，喜欢分享。我擅长的技术栈有：Unity3D、Unreal、C#、C++、Python、MERN Stack等。"
+    "intro":{
+      "title": "关于我",
+      "content": "我是一名在读的计算机科学硕士生，专注于游戏开发。我热爱编程，喜欢尝试新技术。我喜欢游戏，喜欢设计游戏。\n"
+    },
+    "techstack":{
+      "title": "我的技术栈",
+      "content": "软件及API：\n  游戏：Unity3D、Unreal\n  前端：React、Bootstrap、MUI、MERN Stack\n\n编程语言：\n  C#、C++、Python、javascript、HTML、CSS等。\n"
+    },
+    "hobby":{
+      "title": "我的爱好",
+      "content":"我也爱好建模，我会使用Zbrush、Maya等建模软件以及Substance Painter、Substance Designeer、Photoshop等软件制作纹理。"
+    }
+  },
+
+  "game": {
+    "play": "开始游戏",
+
+    "gamedata": {
+      "morph": {
+        "title": "变形",
+        "tags": ["Unity", "PC", "2D", "平台跳跃", "独立", "解谜", "像素", "物理"]
+      },
+      "planet": {
+        "title": "程序生成行星",
+        "tags": ["Unity", "PC", "3D", "程序生成", "模拟", "着色器", "噪音", "地形"]
+      },
+      "knight": {
+        "title": "骑士与长矛",
+        "tags": ["Unity", "PC", "2D", "像素", "RogueLike", "竞技场", "史诗"]
+      },
+      "tetris": {
+        "title": "俄罗斯方块跑酷",
+        "tags": ["Unity", "PC", "3D", "GameJam", "解谜", "街机", "低多边形"]
+      },
+      "seagull": {
+        "title": "海鸥快递",
+        "tags": ["Unity", "Mobile", "2D", "配送", "跑酷", "卡通", "动物"]
+      }
+    }
+  },
+
+  "model": {
+    "modeldata":{
+      "Chocobo": "陆行鸟",
+      "Eva": "二号机",
+      "Kuromi": "西太后库洛米",
+      "restaurant": "快餐店"
+    }
   }
+
 }
   

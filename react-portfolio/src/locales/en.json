@@ -7,17 +7,67 @@
     "model": "3D Models",
     "resume": "Resume"
   },
+
   "footer": {
     "copyright": "© 2025 Charles Pan. All Rights Reserved."
   },
+
   "home": {
     "hero1" : "Welcome to",
     "hero2" : "Charles' Portfolio",
     "hero-sub" : "Everything you need to know about me"
   },
+
   "about": {
-    "title": "About Me",
-    "content": "I am a Computer Science Master's student with a focus on game development. I love coding and trying out new technologies. I love games and designing games. I love learning and sharing. My tech stack includes Unity3D, Unreal, C#, C++, Python, MERN Stack, etc."
+    "intro":{
+      "title": "About Me",
+      "content": "I am a Computer Science Master student, focusing on Game Development. I love coding and trying new technologies. I love games and designing games.\n"
+    },
+    "techstack":{
+      "title": "My Tech Stack",
+      "content": "Software and API:\n  Game: Unity3D, Unreal\n  Frontend: React, Bootstrap, MUI, MERN Stack\n\nProgramming Languages:\n  C#, C++, Python, javascript, HTML, CSS, etc.\n"
+    },
+    "hobby":{
+      "title": "My Hobby",
+      "content":"In addition, I also love modeling. I can use modeling software such as Zbrush, Maya, as well as Substance Painter, Substance Designeer, Photoshop and other software to create textures."
+    }
+  },
+
+  "game":{
+    "play": "Play",
+
+    "gamedata": {
+      "morph": {
+        "title": "Morph",
+        "tags": ["Unity", "PC", "2D", "Platformer", "Indie", "Puzzle", "Pixel", "Physics"]
+      },
+      "planet": {
+        "title": "Procedural Planet",
+        "tags": ["Unity", "PC", "3D", "Procedural", "Simulation", "Shader", "Noise", "Terrain"]
+      },
+      "knight": {
+        "title": "Knight and Spear",
+        "tags": ["Unity", "PC", "2D", "Pixel", "RogueLike", "Arena", "Epic"]
+      },
+      "tetris": {
+        "title": "Tetris Rush",
+        "tags": ["Unity", "PC", "3D", "GameJam", "Puzzle", "Arcade", "LowPoly"]
+      },
+      "seagull": {
+        "title": "Seagull Express",
+        "tags": ["Unity", "Mobile", "2D", "Delivery", "Runner", "Cartoon", "Animals"]
+      }
+    }
+  },
+
+  "model":{
+    "models":{
+      "Chocobo": "Chocobo",
+      "Eva": "Evangeline02",
+      "Kuromi": "Kuromi On a Saturn",
+      "restaurant": "Restaurant"
+    }
   }
+
 }
   

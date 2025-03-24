@@ -4,6 +4,7 @@ import FadeInScaleUpOnScroll from './FadeInScaleUpOnScroll';
 import { ScrollTrigger, ScrollToPlugin } from 'gsap/all';
 import { gsap } from 'gsap';
 import { MdKeyboardDoubleArrowDown, MdKeyboardDoubleArrowUp } from 'react-icons/md';
+import { useTranslation } from 'react-i18next';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
@@ -30,6 +31,9 @@ const Model = () => {
   const totalImages = Object.keys(images).reduce((count, modelName) => count + images[modelName].length, 0);
   let imgCount = -1;
   let curImgIndex = 0;
+
+  // localization
+  const { t } = useTranslation();
 
   // Refresh ScrollTrigger after all images are loaded
   useEffect(() => {
@@ -80,7 +84,9 @@ const Model = () => {
     <Container fluid>
       {Object.keys(images).map((modelName, index) => (
         <div key={index} className="model-section my-5">
-          <h2 className="text-center my-4">{modelName.replace('_', ' ')}</h2> {/* Displays the model name */}
+          <h2 className="text-center my-4">
+            {t(`model.modeldata.${modelName}`)}
+          </h2> {/* Displays the model name */}
 
           <Row className="justify-content-center">
             {images[modelName].map((imageSrc, imgIndex) => {
