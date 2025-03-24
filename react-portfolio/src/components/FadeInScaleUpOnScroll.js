@@ -31,7 +31,7 @@ const FadeInScaleUpOnScroll = ({
       start: start, // Default: when top of section hits 80% of viewport height
       end: end,     // Default: when bottom of section hits top of viewport
       scrub: true,  // Smooth transition with scrolling
-      markers: true,  // Enable markers for debugging
+      markers: false,  // Enable markers for debugging
       onUpdate: (self) => {
         const progress = self.progress; // Progress is between 0 and 1
         gsap.to(element, {

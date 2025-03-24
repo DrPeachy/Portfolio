@@ -100,7 +100,7 @@ const Game = () => {
               </FadeInScaleUpOnScroll>
             </Col>
 
-            <Col xl={3} className="d-flex flex-column justify-content-center" >
+            <Col xl={5} className="d-flex flex-column justify-content-center" >
               <FadeInScaleUpOnScroll
                 start="top 5%"
                 style={{

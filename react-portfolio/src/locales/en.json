@@ -1,0 +1,14 @@
+{
+    "navbar": {
+      "home": "Home",
+      "about": "About Me",
+      "game": "Game",
+      "showcase": "Showcase",
+      "model": "3D Models",
+      "resume": "Resume"
+    },
+    "footer": {
+      "copyright": "© 2025 Charles Pan. All Rights Reserved."
+    }
+  }
+  

@@ -1,0 +1,14 @@
+{
+    "navbar": {
+      "home": "首页",
+      "about": "关于我",
+      "game": "游戏",
+      "showcase": "作品展示",
+      "model": "3D 模型",
+      "resume": "简历"
+    },
+    "footer": {
+      "copyright": "© 2025 Charles Pan. 版权所有."
+    }
+  }
+  

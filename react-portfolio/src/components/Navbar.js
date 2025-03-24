@@ -3,9 +3,9 @@ import { Navbar, Nav, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap'; // Import GSAP for animations
 import { MdKeyboardDoubleArrowDown, MdKeyboardDoubleArrowUp } from 'react-icons/md';
+import { useTranslation } from "react-i18next";
 
 const MyNavbar = () => {
-
   // Function to handle navbar color change on scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +36,9 @@ const MyNavbar = () => {
     };
   }, []);
 
+  // localization
+  const { t } = useTranslation();
+
   return (
     <div id="navbar-section">
       <Navbar expand="xl">
@@ -48,10 +51,11 @@ const MyNavbar = () => {
           </Navbar.Toggle>
           <Navbar.Collapse id="navbarNav">
             <Nav className="ml-auto">
-              <Nav.Link as={Link} to="/me" className="nav-link">Me</Nav.Link>
-              <Nav.Link as={Link} to="/game" className="nav-link">Games</Nav.Link>
-              <Nav.Link as={Link} to="/model" className="nav-link">3D Modeling</Nav.Link>
-              <Nav.Link as={Link} to="/resume" className="nav-link">Resume</Nav.Link>
+              <Nav.Link as={Link} to="/me" className="nav-link">{t("navbar.about")}</Nav.Link>
+              <Nav.Link as={Link} to="/game" className="nav-link">{t("navbar.game")}</Nav.Link>
+              <Nav.Link as={Link} to="/showcase" className="nav-link">{t("navbar.showcase")}</Nav.Link>
+              <Nav.Link as={Link} to="/model" className="nav-link">{t("navbar.model")}</Nav.Link>
+              <Nav.Link as={Link} to="/resume" className="nav-link">{t("navbar.resume")}</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
