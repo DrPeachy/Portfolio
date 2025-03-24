@@ -61,7 +61,7 @@
   },
 
   "model":{
-    "models":{
+    "modeldata":{
       "Chocobo": "Chocobo",
       "Eva": "Evangeline02",
       "Kuromi": "Kuromi On a Saturn",

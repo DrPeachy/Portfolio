@@ -1,8 +1,11 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaGithub, FaSteam, FaLinkedin, FaItchIo } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <Container fluid>
       <Row className="justify-content-center align-items-center" id="footer-icon">
@@ -50,7 +53,7 @@ const Footer = () => {
       <Row className="justify-content-center mt-4" id="footer-copyright">
         <Col xs={12} className="text-center">
           <p className="lead">
-            © 2023 Cheng Pan. All rights reserved.
+            {t('footer.copyright')}
           </p>
         </Col>
       </Row>
