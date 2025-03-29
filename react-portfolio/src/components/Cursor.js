@@ -82,14 +82,49 @@ const Cursor = () => {
     });
   };
 
-  const mouseUp = () => {
+  const mouseUp = (e) => {
     setIsClicked(false); // Reset click state
     const cursor = cursorRef.current;
-    gsap.to(cursor, {
-      scale: isHovered ? 2.2 : 1, // If hovered, return to hover size, else normal size
-      duration: 0.2,
-      ease: "power2.out",
-    });
+
+    const interactiveElement = document.elementFromPoint(e.clientX, e.clientY)?.closest("a, button, .clickable-layer");
+    if (!interactiveElement) {
+      // 如果鼠标不在交互元素上，则执行 unhover 动画
+      setIsHovered(false);
+      gsap.to(cursor, {
+        scale: 1,
+        rotate: 0,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+      gsap.to("#cursor-ellipse", {
+        fill: "rgb(216, 216, 216)",
+        duration: 0.2,
+        ease: "power2.out",
+      });
+      gsap.to("#cursor-line1", {
+        attr: { y1: 195.739, y2: 204.261 },
+        duration: 0.2,
+        ease: "power2.out",
+      });
+      gsap.to("#cursor-line2", {
+        attr: { x1: 204.261, x2: 195.739 },
+        duration: 0.2,
+        ease: "power2.out",
+      });
+    } else {
+      // 如果鼠标仍然在交互元素上，保持 hover 状态的缩放
+      gsap.to(cursor, {
+        scale: 2.2,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+    }
+
+    // gsap.to(cursor, {
+    //   scale: isHovered ? 2.2 : 1, // If hovered, return to hover size, else normal size
+    //   duration: 0.2,
+    //   ease: "power2.out",
+    // });
   };
 
   // Handle mouse leave (fade out)
@@ -145,6 +180,7 @@ const Cursor = () => {
       interactiveElements.forEach((el) => {
         el.removeEventListener("mouseenter", hoverCursor);
         el.removeEventListener("mouseleave", unhoverCursor);
+        
       });
     };
   }, [isHovered, isClicked]);

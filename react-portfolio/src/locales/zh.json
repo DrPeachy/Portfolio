@@ -60,6 +60,29 @@
     }
   },
 
+  "showcase": {
+    "checkout": "查看作品",
+
+    "showcaseData":{
+      "PBR":{
+        "title": "PBR渲染-OpenGL",
+        "description": "参照learnOpenGL的PBR渲染教程，使用OpenGL实现的PBR渲染器。使用C++处理模型以及材质数据以传入GPU，并于GPU端编写着色器。根据Cook-Torrance模型计算光照，使用IBL技术进行环境光照渲染。"
+      },
+      "Shader":{
+        "title": "着色器练手项目",
+        "description": "在Unity中实现各种不同效果的着色器，主要参照庄董的着色器开发教程，使用ShaderLab语言进行着色器编写。"
+      },
+      "Resume":{
+        "title": "MERN全栈项目-简历救星",
+        "description": "使用MERN全栈技术栈实现的简历生成器，支持用户注册、登录、创建简历、调整简历格式、实时生成PDF格式文件等功能。使用Passport库处理用户身份验证，使用Mongoose库处理MongoDB数据库操作。前端使用React框架以及Material UI作为CSS框架，后端使用Node.js和Express框架。"
+      },
+      "RayTracing":{
+        "title": "光线追踪-OpenGL",
+        "description": "使用OpenGL实现的光线追踪渲染器。在C++中手动计算网格数据并传入Buffer对象，使用OpenGL进行渲染。实现了光线追踪的基本原理，包括光线与物体的相交检测、镜面反射等。"
+      }
+    }
+  },
+
   "model": {
     "modeldata":{
       "Chocobo": "陆行鸟",
