@@ -71,7 +71,11 @@ const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width
       ref={containerRef}
       className="loading_cont"
       style={{
-        background: background || 'transparent', // Use background prop or default to transparent
+        background: background || 'transparent',
+        width: `${width}px`,
+        height: `${height}px`,
+        margin: '0px',
+        position: 'relative'
       }}
     >
       {textureUrl && (

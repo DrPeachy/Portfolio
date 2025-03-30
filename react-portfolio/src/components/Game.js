@@ -45,6 +45,9 @@ const importAll = (r) => {
 
 const gameImages = importAll(require.context('../img/games', false, /\.(png|jpe?g|svg)$/));
 
+const tagsWidth = "500px";
+const tagsHeight = "470px";
+
 const Game = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { t } = useTranslation();
@@ -85,27 +88,28 @@ const Game = () => {
         <div key={index} className="game-section my-5">
           <h2 className="text-center my-4">{gameInfo.title}</h2>
 
-          <Row className="justify-content-center align-items-center">
-            <Col xl={2} className="justify-content-center ">
+          <Row className="justify-content-center align-items-stretch">
+            <Col xl={3} className="d-flex justify-content-center align-items-center"
+            >
               {/* Apply fade-in and scale-up effect on scroll */}
               <FadeInScaleUpOnScroll
                 start="top 5%"
                 style={{
-                  maxWidth: 'auto',
+                  width: '100%',
                 }}
               >
-                <Image src={gameImages[gameInfo.imageFileName]} fluid alt={gameInfo.title} style={{
+                <Image src={gameImages[gameInfo.imageFileName]} alt={gameInfo.title} style={{
                   borderRadius: '55px',
                   boxShadow: '4px 4px 20px rgba(55, 152, 255, 0.4)',
+                  width: '90%',
                 }} />
               </FadeInScaleUpOnScroll>
             </Col>
 
-            <Col xl={5} className="d-flex flex-column justify-content-center" >
+            <Col xl={3} className="d-flex flex-column justify-content-center" >
               <FadeInScaleUpOnScroll
                 start="top 5%"
                 style={{
-                  maxWidth: 'auto',
                   PointerEvent: 'none',
                 }}
               >

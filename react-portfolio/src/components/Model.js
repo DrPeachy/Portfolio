@@ -83,8 +83,8 @@ const Model = () => {
   return (
     <Container fluid>
       {Object.keys(images).map((modelName, index) => (
-        <div key={index} className="model-section my-5">
-          <h2 className="text-center my-4">
+        <div key={index} className="model-section my-2">
+          <h2 className="text-center md-4">
             {t(`model.modeldata.${modelName}`)}
           </h2> {/* Displays the model name */}
 
@@ -92,15 +92,22 @@ const Model = () => {
             {images[modelName].map((imageSrc, imgIndex) => {
               imgCount += 1; // Increment the image count
               return (
-                <Col key={imgIndex} md={11}>
+                <Col key={imgIndex} md={10} 
+                >
                   {/* Apply fade-in and scale-up effect on scroll */}
-                  <FadeInScaleUpOnScroll start="top 5%">
+                  <FadeInScaleUpOnScroll start="top 5%"
+                    style={{
+                      pointerEvents: 'none', // Disable pointer events for the image
+                    }}
+                  >
                     <Image
                       src={imageSrc}
-                      fluid
                       alt={`${modelName} ${imgIndex + 1}`}
                       onLoad={handleImageLoad} // Call when image loads
                       id={`model_img_${imgCount}`} // Unique ID for each image
+                      style={{
+                        width: '100%',
+                      }}
                     />
                   </FadeInScaleUpOnScroll>
                 </Col>

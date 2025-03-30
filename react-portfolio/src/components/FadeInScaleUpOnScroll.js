@@ -51,7 +51,11 @@ const FadeInScaleUpOnScroll = ({
   }, [start, end, duration, scaleStart, scaleEnd]);
 
   return (
-    <div ref={sectionRef} className="fade-in-scale-up-section" style={{ ...style }}>
+    <div ref={sectionRef} className="fade-in-scale-up-section"
+      style=
+      {{
+        ...style,
+      }}>
       {children}
     </div>
   );

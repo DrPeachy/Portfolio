@@ -30,16 +30,12 @@ const staticShowcaseData = {
   }
 };
 
-// 预先加载整个 "../img/showcase" 目录下的所有图片（递归查找）
 const importAllImages = () => {
   try {
-    // 注意此处的路径和正则表达式需根据实际情况调整
     const context = require.context('../img/showcase', true, /\.(png|jpe?g|svg)$/);
     let imagesByFolder = {};
     context.keys().forEach((key) => {
-      // 假设 key 格式为 "./PBR/image1.png" 或 "./Shader/image2.jpg"
       const parts = key.split('/');
-      // parts[1] 就是文件夹名称，例如 "PBR" 或 "Shader"
       const folderName = parts[1];
       if (!imagesByFolder[folderName]) {
         imagesByFolder[folderName] = [];
@@ -53,7 +49,6 @@ const importAllImages = () => {
   }
 };
 
-// 在模块加载时就预先读取所有展示用的图片
 const allShowcaseImages = importAllImages();
 
 const Showcase = () => {
@@ -65,28 +60,43 @@ const Showcase = () => {
         const project = staticShowcaseData[key];
         const images = allShowcaseImages[project.imagesFolderName] || [];
         return (
-          <Row key={key} className="mb-4">
-            <Col>
-              <FadeInScaleUpOnScroll>
+          <Row key={key} className="mb-4" style={{ height: "80vh" }}>
+            <Col style={{ position: "relative", height: "100%" }}>
+              <FadeInScaleUpOnScroll
+                start="top 5%"
+              >
                 <h2>{t(project.localizationKey)}</h2>
                 <a href={project.link} target="_blank" rel="noopener noreferrer">
                   {project.link}
                 </a>
-                {images.length > 0 ? (
-                  <Carousel style={{ maxWidth: "600px", margin: "0 auto" }}>
-                    {images.map((image, index) => (
-                      <Carousel.Item key={index}>
-                        <img
-                          className="d-block w-100"
-                          src={image}
-                          alt={`Slide ${index}`}
-                        />
-                      </Carousel.Item>
-                    ))}
-                  </Carousel>
-                ) : (
-                  <p>未加载到图片</p>
-                )}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "10%",     // 可根据需要调整偏移
+                    left: "50%",
+                    transform: "translateX(-50%)"
+                  }}
+                >
+                  {images.length > 0 ? (
+                    <Carousel 
+                      style={{
+                        maxHeight: "70%", 
+                      }}
+                    >
+                      {images.map((image, index) => (
+                        <Carousel.Item key={index}>
+                          <img
+                            className="d-block w-100"
+                            src={image}
+                            alt={`Slide ${index}`}
+                          />
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                  ) : (
+                    <p>未加载到图片</p>
+                  )}
+                </div>
               </FadeInScaleUpOnScroll>
             </Col>
           </Row>
