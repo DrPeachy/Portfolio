@@ -4,8 +4,8 @@ import Col from "react-bootstrap/Col";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 // Import resume files
-import ResumeUS from "../resumes/resume - US9.28.pdf";
-import ResumeCN from "../resumes/resume - CN11.23.pdf";
+import ResumeUS from "../resumes/resume - US25.3.29.pdf";
+import ResumeCN from "../resumes/resume - CN2025-3-24.pdf";
 import Container from "react-bootstrap/esm/Container";
 
 const App = () => {
