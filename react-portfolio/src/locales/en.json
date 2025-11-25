@@ -14,7 +14,8 @@
 
   "home": {
     "hero1" : "Welcome to",
-    "hero2" : "Charles' Portfolio",
+    "hero2_first" : "Charles",
+    "hero2_second" : " Realm",
     "hero-sub" : "Everything you need to know about me"
   },
 

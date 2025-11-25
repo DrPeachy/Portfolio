@@ -1,232 +1,192 @@
 import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
+import styled, { useTheme } from "styled-components";
+
+// === Styled Components ===
+
+const CursorWrapper = styled.div`
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+`;
+
+// 1. 核心小圆点
+const MainDot = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background-color: ${props => props.theme.colors.primary};
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+`;
+
+// 2. 跟随大圆圈
+const Ring = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid ${props => props.theme.colors.primary};
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.6;
+`;
 
 const Cursor = () => {
-  const cursorRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false); // For hover state
-  const [isClicked, setIsClicked] = useState(false); // For click state
-  const [isOutside, setIsOutside] = useState(false); // New state for detecting when cursor is outside the page
+  const theme = useTheme();
+  const mainDot = useRef(null);
+  const ring = useRef(null);
+  
+  // 坐标记录
+  const mousePos = useRef({ x: -100, y: -100 }); // 初始移出屏幕外
+  const ringPos = useRef({ x: -100, y: -100 });
 
-  // Update cursor position
-  const moveCursor = (e) => {
-    const cursor = cursorRef.current;
-    const { clientX: x, clientY: y } = e;
-    cursor.style.left = `${x}px`;
-    cursor.style.top = `${y}px`;
-  };
+  const [isHovered, setIsHovered] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
-  // Handle cursor hover animations
-  const hoverCursor = () => {
-    if (isClicked) return; // Skip hover animation if clicked
-    setIsHovered(true);
-    const cursor = cursorRef.current;
-    gsap.to(cursor, {
-      scale: 2,
-      rotate: 45,
-      duration: 0.2,
-      ease: "power2.out",
-    });
-    gsap.to("#cursor-ellipse", {
-      fill: "rgb(55, 152, 255)",
-      duration: 0.2,
-      ease: "power2.out",
-    });
-    gsap.to("#cursor-line1", {
-      attr: { y1: 175, y2: 225 },
-      duration: 0.2,
-      ease: "power2.out",
-    });
-    gsap.to("#cursor-line2", {
-      attr: { x1: 225, x2: 175 },
-      duration: 0.2,
-      ease: "power2.out",
-    });
-  };
-
-  // Handle cursor unhover animations
-  const unhoverCursor = () => {
-    if (isClicked) return; // Skip unhover animation if clicked
-    setIsHovered(false);
-    const cursor = cursorRef.current;
-    gsap.to(cursor, {
-      scale: 1,
-      rotate: 0,
-      duration: 0.2,
-      ease: "power2.out",
-    });
-    gsap.to("#cursor-ellipse", {
-      fill: "rgb(216, 216, 216)",
-      duration: 0.2,
-      ease: "power2.out",
-    });
-    gsap.to("#cursor-line1", {
-      attr: { y1: 195.739, y2: 204.261 },
-      duration: 0.2,
-      ease: "power2.out",
-    });
-    gsap.to("#cursor-line2", {
-      attr: { x1: 204.261, x2: 195.739 },
-      duration: 0.2,
-      ease: "power2.out",
-    });
-  };
-
-  // Handle mouse down animations
-  const mouseDown = () => {
-    setIsClicked(true); // Set click state to true
-    const cursor = cursorRef.current;
-    gsap.to(cursor, {
-      scale: isHovered ? 1.8 : 0.8, // If hovered, keep hover size, else shrink
-      duration: 0.2,
-      ease: "power2.out",
-    });
-  };
-
-  const mouseUp = (e) => {
-    setIsClicked(false); // Reset click state
-    const cursor = cursorRef.current;
-
-    const interactiveElement = document.elementFromPoint(e.clientX, e.clientY)?.closest("a, button, .clickable-layer");
-    if (!interactiveElement) {
-      // 如果鼠标不在交互元素上，则执行 unhover 动画
-      setIsHovered(false);
-      gsap.to(cursor, {
-        scale: 1,
-        rotate: 0,
-        duration: 0.2,
-        ease: "power2.out",
-      });
-      gsap.to("#cursor-ellipse", {
-        fill: "rgb(216, 216, 216)",
-        duration: 0.2,
-        ease: "power2.out",
-      });
-      gsap.to("#cursor-line1", {
-        attr: { y1: 195.739, y2: 204.261 },
-        duration: 0.2,
-        ease: "power2.out",
-      });
-      gsap.to("#cursor-line2", {
-        attr: { x1: 204.261, x2: 195.739 },
-        duration: 0.2,
-        ease: "power2.out",
-      });
-    } else {
-      // 如果鼠标仍然在交互元素上，保持 hover 状态的缩放
-      gsap.to(cursor, {
-        scale: 2.2,
-        duration: 0.2,
-        ease: "power2.out",
-      });
-    }
-
-    // gsap.to(cursor, {
-    //   scale: isHovered ? 2.2 : 1, // If hovered, return to hover size, else normal size
-    //   duration: 0.2,
-    //   ease: "power2.out",
-    // });
-  };
-
-  // Handle mouse leave (fade out)
-  const mouseLeave = () => {
-    setIsOutside(true); // Set outside state to true
-    const cursor = cursorRef.current;
-    gsap.to(cursor, {
-      opacity: 0, // Fade out
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  };
-
-  // Handle mouse enter (fade in)
-  const mouseEnter = () => {
-    setIsOutside(false); // Reset outside state
-    const cursor = cursorRef.current;
-    gsap.to(cursor, {
-      opacity: 1, // Fade in
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  };
-
-  // Add event listeners for mouse movement, click, and hover events
+  // ========================================================
+  // 1. 鼠标跟随逻辑 (RAF Loop)
+  // ========================================================
   useEffect(() => {
-    const cursor = cursorRef.current;
-    document.addEventListener("mousemove", moveCursor);
-    document.addEventListener("mousedown", mouseDown);
-    document.addEventListener("mouseup", mouseUp);
-    document.addEventListener("mouseleave", mouseLeave); // Add mouse leave event
-    document.addEventListener("mouseenter", mouseEnter); // Add mouse enter event
-    // add mouse leave and enter for pdf
-    document.querySelector("#resume-section")?.addEventListener("mouseenter", mouseLeave);
-    document.querySelector("#resume-section")?.addEventListener("mouseleave", mouseEnter);
+    const onMouseMove = (e) => {
+      mousePos.current = { x: e.clientX, y: e.clientY };
+      // Dot 立即跟随
+      if (mainDot.current) {
+        gsap.set(mainDot.current, { x: e.clientX, y: e.clientY });
+      }
+    };
 
-    const interactiveElements = document.querySelectorAll("a, button, .clickable-layer");
+    document.addEventListener("mousemove", onMouseMove);
 
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", hoverCursor);
-      el.addEventListener("mouseleave", unhoverCursor);
-    });
+    const loop = () => {
+      if (!ring.current) return;
+      // 弹性跟随算法
+      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.15;
+      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.15;
+      gsap.set(ring.current, { x: ringPos.current.x, y: ringPos.current.y });
+      requestAnimationFrame(loop);
+    };
+    
+    const rafId = requestAnimationFrame(loop);
 
     return () => {
-      document.removeEventListener("mousemove", moveCursor);
-      document.removeEventListener("mousedown", mouseDown);
-      document.removeEventListener("mouseup", mouseUp);
-      document.removeEventListener("mouseleave", mouseLeave); // Remove mouse leave event
-      document.removeEventListener("mouseenter", mouseEnter); // Remove mouse enter event
-      // remove mouse leave for pdf
-      document.querySelector("#resume-section")?.removeEventListener("mouseenter", mouseLeave);
-      document.querySelector("#resume-section")?.removeEventListener("mouseleave", mouseEnter);
-      interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", hoverCursor);
-        el.removeEventListener("mouseleave", unhoverCursor);
-        
-      });
+      document.removeEventListener("mousemove", onMouseMove);
+      cancelAnimationFrame(rafId);
     };
-  }, [isHovered, isClicked]);
+  }, []);
+
+  // ========================================================
+  // 2. 状态动画逻辑 (统一管理，避免冲突)
+  // ========================================================
+  useEffect(() => {
+    const dot = mainDot.current;
+    const r = ring.current;
+
+    // 定义不同状态下的样式配置
+    let targetDotState = {};
+    let targetRingState = {};
+
+    if (isClicked) {
+      // === CLICK 状态 ===
+      if (isHovered) {
+        // 如果是在悬停时点击：保持半透明填充，稍微缩小
+        targetDotState = { scale: 0, opacity: 0 };
+        targetRingState = {
+          scale: 1.2, // 比普通 Hover (1.5) 小一点，产生按压感
+          borderWidth: 0,
+          backgroundColor: theme.colors.primary,
+          opacity: 0.3, // 点击时稍微加深一点
+        };
+      } else {
+        // 普通点击：两个都缩小
+        targetDotState = { scale: 0.8, opacity: 1 };
+        targetRingState = {
+          scale: 0.8,
+          borderWidth: 1.5,
+          backgroundColor: "transparent",
+          opacity: 0.6,
+        };
+      }
+    } else if (isHovered) {
+      // === HOVER 状态 ===
+      targetDotState = { scale: 0, opacity: 0 }; // 隐藏小圆点
+      targetRingState = {
+        scale: 1.5,
+        borderWidth: 0,
+        backgroundColor: theme.colors.primary,
+        opacity: 0.2, // 变淡
+      };
+    } else {
+      // === NORMAL 状态 ===
+      targetDotState = { scale: 1, opacity: 1 };
+      targetRingState = {
+        scale: 1,
+        borderWidth: 1.5,
+        backgroundColor: "transparent",
+        opacity: 0.6,
+      };
+    }
+
+    // 统一执行动画，overwrite: true 确保之前的状态被完全覆盖
+    gsap.to(dot, { ...targetDotState, duration: 0.3, overwrite: true });
+    gsap.to(r, { ...targetRingState, duration: 0.3, overwrite: true });
+
+  }, [isHovered, isClicked, theme]);
+
+  // ========================================================
+  // 3. 事件委托逻辑 (Event Delegation)
+  // ========================================================
+  useEffect(() => {
+    // 检查元素是否可交互
+    const isInteractive = (target) => {
+      const el = target.closest("a, button, input, textarea, .clickable-layer");
+      return !!el; // 如果找到了就返回 true
+    };
+
+    const handleMouseOver = (e) => {
+      if (isInteractive(e.target)) {
+        setIsHovered(true);
+        // 可选：强制设置 CSS cursor 避免系统光标闪烁
+        e.target.closest("a, button, input, textarea, .clickable-layer").style.cursor = 'none';
+      }
+    };
+
+    const handleMouseOut = (e) => {
+      if (isInteractive(e.target)) {
+        setIsHovered(false);
+      }
+    };
+
+    const handleMouseDown = () => setIsClicked(true);
+    const handleMouseUp = () => setIsClicked(false);
+
+    // 监听 document 而不是 specific elements
+    document.addEventListener("mouseover", handleMouseOver);
+    document.addEventListener("mouseout", handleMouseOut);
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mouseover", handleMouseOver);
+      document.removeEventListener("mouseout", handleMouseOut);
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
 
   return (
-    <div id="cursor" className="cursor" ref={cursorRef}>
-      <svg viewBox="140 140 120 120" xmlns="http://www.w3.org/2000/svg">
-        <ellipse
-          id="cursor-ellipse"
-          style={{
-            fill: "rgb(216, 216, 216)",
-            stroke: "rgb(0, 0, 0)",
-            fillOpacity: 0.3,
-            strokeWidth: 6,
-          }}
-          cx="200"
-          cy="200"
-          rx="53.219"
-          ry="53.219"
-        />
-        <line
-          id="cursor-line1"
-          style={{
-            stroke: "rgb(0, 0, 0)",
-            strokeLinecap: "round",
-            strokeWidth: 5,
-          }}
-          x1="200"
-          y1="195.739"
-          x2="200"
-          y2="204.261"
-        />
-        <line
-          id="cursor-line2"
-          style={{
-            stroke: "rgb(0, 0, 0)",
-            strokeLinecap: "round",
-            strokeWidth: 5,
-          }}
-          x1="204.261"
-          y1="200"
-          x2="195.739"
-          y2="200"
-        />
-      </svg>
-    </div>
+    <CursorWrapper>
+      <Ring ref={ring} />
+      <MainDot ref={mainDot} />
+    </CursorWrapper>
   );
 };
 
