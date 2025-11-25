@@ -1,6 +1,5 @@
 /* =========================================
    1. 字体系统 (Typography System)
-   保留你的 Gotham 字体族
    ========================================= */
 @font-face {
   font-family: Gotham-Black;
@@ -29,6 +28,42 @@
 @font-face {
   font-family: Gotham-Ultra;
   src: url("./fonts/Gotham/Gotham-Ultra.otf");
+}
+@font-face {
+  font-family: Alibaba-Black;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-115-Black.otf");
+}
+@font-face {
+  font-family: Alibaba-Heavy;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-105-Heavy.otf");
+}
+@font-face {
+  font-family: Alibaba-ExtraBold;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-95-ExtraBold.otf");
+}
+@font-face {
+  font-family: Alibaba-Bold;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-85-Bold.otf");
+}
+@font-face {
+  font-family: Alibaba-SemiBold;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-75-SemiBold.otf");
+}
+@font-face {
+  font-family: Alibaba-Medium;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-65-Medium.otf");
+}
+@font-face {
+  font-family: Alibaba-Regular;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-55-Regular.otf");
+}
+@font-face {
+  font-family: Alibaba-Light;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-45-Light.otf");
+}
+@font-face {
+  font-family: Alibaba-Thin;
+  src: url("./fonts/AlibabaPuHuiTi/AlibabaPuHuiTi-3-35-Thin.otf");
 }
 
 /* =========================================

@@ -2,24 +2,40 @@
 export const theme = {
   // 1. 调色板 (Palette)
   colors: {
-    primary: '#3798ff',       // 你的电光蓝
-    secondary: '#a8d2ff',     // 辅色
-    bg: '#f2f2f2',           // 混凝土浅灰背景
+    primary: '#3798ff',       // 电光蓝 (Electric Blue)
+    secondary: '#a8d2ff',     // 浅蓝 (Light Blue)
+    bg: '#f2f2f2',           // 混凝土浅灰背景 (Concrete Gray)
     text: {
-      main: '#111111',       // 主标题黑
-      secondary: '#444444',  // 正文深灰
-      light: '#ffffff'       // 反白文字
+      main: '#111111',       // 主标题黑 (Almost Black)
+      secondary: '#444444',  // 正文深灰 (Dark Gray)
+      light: '#ffffff'       // 反白文字 (White)
     }
   },
   
   // 2. 字体系统 (Typography)
-  // 对应你在 index.css 里引入的 font-family
+  // 核心逻辑："'英文优先字体', '中文优先字体', 兜底字体"
+  // 这样浏览器渲染英文用 Gotham，渲染中文自动 fallback 到 Alibaba
   fonts: {
-    thin: "'Gotham-Thin', sans-serif",
-    light: "'Gotham-Light', sans-serif",
-    book: "'Gotham-Book', sans-serif",
-    medium: "'Gotham-Medium', sans-serif",
-    bold: "'Gotham-Bold', sans-serif",
+    // 极细体 (35/100)
+    thin: "'Gotham-Thin', 'Alibaba-Thin', sans-serif",
+    
+    // 细体 (45/300)
+    light: "'Gotham-Light', 'Alibaba-Light', sans-serif",
+    
+    // 常规/正文 (55/400) - Gotham 的 "Book" 对应标准 Regular
+    book: "'Gotham-Book', 'Alibaba-Regular', sans-serif",
+    
+    // 中等 (65/500)
+    medium: "'Gotham-Medium', 'Alibaba-Medium', sans-serif",
+    
+    // 粗体 (85/700)
+    bold: "'Gotham-Bold', 'Alibaba-Bold', sans-serif",
+    
+    // 特粗 (95/800)
+    extraBold: "'Gotham-Black', 'Alibaba-ExtraBold', sans-serif",
+    
+    // 极粗 (105/900)
+    heavy: "'Gotham-Ultra', 'Alibaba-Heavy', sans-serif", // Ultra 对应 Heavy
   },
   
   // 3. 间距系统 (Spacing) - 保持韵律感
