@@ -238,7 +238,6 @@ const MyNavbar = () => {
 
           {/* 移动端汉堡按钮 (Desktop 隐藏) */}
           <div className="d-md-none" style={{ display: 'flex' }}> 
-            {/* 注意：d-md-none 是 Bootstrap 的类，既然去掉了 Bootstrap，我们需要自己写 Media Query */}
              <IconBtn onClick={toggleMobileMenu} $scrolled={scrolled || mobileMenuOpen} style={{ display: 'flex', '@media (min-width: 961px)': { display: 'none' } }}>
                 {mobileMenuOpen ? <IoCloseOutline /> : <RxHamburgerMenu />}
              </IconBtn>

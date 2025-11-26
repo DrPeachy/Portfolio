@@ -22,11 +22,11 @@
   "about": {
     "intro":{
       "title": "About Me",
-      "content": "I am a Computer Science Master student, focusing on Game Development. I love coding and trying new technologies. I love games and designing games.\n"
+      "content": "I am a Computer Science Master student, focusing on Game Development. I love coding and trying new technologies. I love games and designing games."
     },
     "techstack":{
       "title": "My Tech Stack",
-      "content": "Software and API:\n  Game: Unity3D, Unreal\n  Frontend: React, Bootstrap, MUI, MERN Stack\n\nProgramming Languages:\n  C#, C++, Python, javascript, HTML, CSS, etc.\n"
+      "content": "Software and API:\n  Game: Unity3D, Unreal\n  Frontend: React, Bootstrap, MUI, MERN Stack\n\nProgramming Languages:\n  C#, C++, Python, javascript, HTML, CSS, etc."
     },
     "hobby":{
       "title": "My Hobby",

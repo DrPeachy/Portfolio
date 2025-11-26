@@ -17,7 +17,6 @@ import Resume from './components/Resume';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
 import GameDebugger from './components/GameDebugger';
-import './App.css';
 import "./i18n";
 
 const AppLayout = styled.div`

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// 1. 删除 Bootstrap 的 Grid 组件，保留 Image (或者你也换成原生 img)
-import Image from 'react-bootstrap/Image'; 
 // 2. 引入你自己的布局组件
 import { GridContainer } from './styled/Layouts'; 
 
@@ -88,7 +86,6 @@ const Game = () => {
                 <TiltCard 
                   src={gameImages[gameInfo.imageFileName]} 
                   alt={gameInfo.title} 
-                  fluid // Bootstrap Image 的属性，保持响应式
                   style={{
                     borderRadius: '20px', // 改小一点圆角，更现代
                     boxShadow: '0 20px 40px rgba(0,0,0,0.2)', // 更柔和的阴影

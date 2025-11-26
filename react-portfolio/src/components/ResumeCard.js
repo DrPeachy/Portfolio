@@ -15,7 +15,7 @@ const CardContainer = styled.div`
   max-width: 450px; /* 稍微调小最大宽度，更容易并排 */
   
   /* 2. 比例与透视 */
-  aspect-ratio: 1 / 1.414; /* A4 纸比例 */
+  aspect-ratio: 1 / 1; /* A4 纸比例 */
   perspective: 1000px;
   cursor: pointer;
   margin: 0 auto;
@@ -23,6 +23,11 @@ const CardContainer = styled.div`
   /* 3. 移动端兜底 */
   @media (max-width: 400px) {
     min-width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 340px; /* 手机上不要太宽 */
+    margin: 0 auto 60px auto; /* 居中且保持底部间距 */
   }
 `;
 

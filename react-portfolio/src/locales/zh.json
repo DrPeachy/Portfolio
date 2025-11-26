@@ -22,11 +22,11 @@
   "about": {
     "intro":{
       "title": "关于我",
-      "content": "我是一名在读的计算机科学硕士生，专注于游戏开发。我热爱编程，喜欢尝试新技术。我喜欢游戏，喜欢设计游戏。\n"
+      "content": "我是一名在读的计算机科学硕士生，专注于游戏开发。我热爱编程，喜欢尝试新技术。我喜欢游戏，喜欢设计游戏。"
     },
     "techstack":{
       "title": "我的技术栈",
-      "content": "软件及API：\n  游戏：Unity3D、Unreal\n  前端：React、Bootstrap、MUI、MERN Stack\n\n编程语言：\n  C#、C++、Python、javascript、HTML、CSS等。\n"
+      "content": "软件及API：\n  游戏：Unity3D、Unreal\n  前端：React、Bootstrap、MUI、MERN Stack\n\n编程语言：\n  C#、C++、Python、javascript、HTML、CSS等。"
     },
     "hobby":{
       "title": "我的爱好",
