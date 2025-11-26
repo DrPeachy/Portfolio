@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { FaEye, FaDownload, FaFilePdf } from 'react-icons/fa';
+import { t } from 'i18next';
 
 // === Styled Components ===
 
@@ -196,17 +197,17 @@ const ResumeCard = ({ title, pdfLink, previewImg }) => {
         ) : (
             <div style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#fff', color: '#ccc'}}>
                 <FaFilePdf size={80} />
-                <p style={{marginTop: '20px', fontFamily: 'Gotham-Book', fontSize: '1.2rem'}}>PDF PREVIEW</p>
+                <p style={{marginTop: '20px', fontFamily: 'Gotham-Book', fontSize: '1.2rem'}}> {t('resume.pdfPreview')} </p>
             </div>
         )}
 
         <Overlay>
           <ActionBtn href={pdfLink} target="_blank" className="primary">
-            <FaEye /> Preview
+            <FaEye /> {t('resume.buttons.preview')}
           </ActionBtn>
           
           <ActionBtn href={pdfLink} download className="secondary">
-            <FaDownload /> Download
+            <FaDownload /> {t('resume.buttons.download')}
           </ActionBtn>
         </Overlay>
       </CardInner>

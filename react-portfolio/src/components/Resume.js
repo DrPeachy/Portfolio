@@ -10,9 +10,7 @@ import ResumeUS from "../resumes/resume - US25.3.29.pdf";
 import ResumeCN from "../resumes/resume - CN2025-3-24.pdf";
 
 // 引入预览图 (如果没有，请先用 null 占位，或者制作截图)
-// import PreviewUS from "../img/resumes/preview-us.jpg";
-// import PreviewCN from "../img/resumes/preview-cn.jpg";
-const PreviewUS = null; // 暂时用 null，显示默认图标
+const PreviewUS = null; 
 const PreviewCN = null;
 
 // === Styled Components ===
@@ -29,7 +27,10 @@ const ResumeContainer = styled(PageWrapper)`
 const Header = styled.div`
   text-align: center;
   margin-bottom: 80px;
-  max-width: 600px;
+  /* === 核心修改 === */
+  /* 之前的 600px 太窄了，改为 900px，让文字横向延展 */
+  max-width: 900px; 
+  width: 100%;
 `;
 
 const Title = styled.h1`
@@ -46,6 +47,8 @@ const Description = styled.p`
   font-size: 1.1rem;
   color: ${props => props.theme.colors.text.secondary};
   line-height: 1.6;
+  /* 之前添加的 pre-line，用于支持 \n 换行 */
+  white-space: pre-line; 
 `;
 
 const CardsGrid = styled.div`
@@ -87,7 +90,7 @@ const Resume = () => {
 
         <FadeInScaleUpOnScroll start="top 85%" delay={0.2}>
           <ResumeCard 
-            title="Chinese Version" 
+            title={t('resume.chinese')}
             pdfLink={ResumeCN} 
             previewImg={PreviewCN} 
           />

@@ -97,10 +97,11 @@
   },
 
   "resume": {
-    "title": "我的简历",
-    "instructions": "悬浮光标至卡片以预览或者下载PDF 可下载两种语言的简历：英文和中文",
+    "title": "简历",
+    "instructions": "悬浮光标至卡片以预览或者下载PDF。\n\n可下载两种语言的简历：英文和中文。",
     "english": "英文简历",
     "chinese": "中文简历",
+    "pdfPreview": "简历预览",
     "buttons": {
       "download": "下载简历",
       "preview": "预览简历"
