@@ -84,6 +84,9 @@
   },
 
   "model": {
+    "title": "模型展示",
+    "subTitle": "使用 Zbrush、Maya、Substance 等软件制作",
+    "element": "张图片",
     "modeldata":{
       "Chocobo": "陆行鸟",
       "Eva": "二号机",

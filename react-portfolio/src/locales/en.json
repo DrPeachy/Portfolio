@@ -84,6 +84,9 @@
   },
 
   "model":{
+    "title": "Model Showcase",
+    "subTitle": "Created using Zbrush, Maya, Substance, and more",
+    "element": "SHOTS",
     "modeldata":{
       "Chocobo": "Chocobo",
       "Eva": "Evangeline02",
