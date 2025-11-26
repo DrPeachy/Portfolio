@@ -2,16 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { theme } from './theme';
 
 // === Styled Components ===
 const Container = styled.div`
   position: relative;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
   border-radius: 20px;
-  box-shadow: inset 0 0 50px rgba(55, 152, 255, 0.05);
-  background: rgba(255, 255, 255, 0.01);
-  backdrop-filter: blur(2px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
 `;
 
 const DraggableTags = ({ tags, colors, width = 500, height = 470, playLink = "#" }) => {
@@ -229,8 +232,8 @@ const DraggableTags = ({ tags, colors, width = 500, height = 470, playLink = "#"
               <>
                 <circle
                   r={blob.radius}
-                  fill="rgba(55, 152, 255, 0.05)"
-                  stroke="#3798ff"
+                  fill={theme.colors.bg}
+                  stroke={theme.colors.primary}
                   strokeWidth="1"
                   strokeOpacity="0.5"
                 />
@@ -238,7 +241,7 @@ const DraggableTags = ({ tags, colors, width = 500, height = 470, playLink = "#"
                   dy=".35em"
                   textAnchor="middle"
                   style={{
-                    fontFamily: 'Gotham-Book',
+                    fontFamily: theme.fonts.medium,
                     fontSize: '14px',
                     fill: '#1a1a1a',
                     pointerEvents: 'none',
@@ -258,7 +261,7 @@ const DraggableTags = ({ tags, colors, width = 500, height = 470, playLink = "#"
                     className="play-pulse"
                     r={blob.radius + 5} 
                     fill="none" 
-                    stroke="#3798ff" 
+                    stroke={theme.colors.primary}
                     strokeWidth="1" 
                     strokeOpacity="0.3"
                 />
@@ -266,16 +269,16 @@ const DraggableTags = ({ tags, colors, width = 500, height = 470, playLink = "#"
                 <circle
                   r={blob.radius}
                   fill="#1a1a1a"
-                  stroke="#3798ff"
+                  stroke={theme.colors.primary}
                   strokeWidth="2"
                 />
                 <text
                   dy=".35em"
                   textAnchor="middle"
                   style={{
-                    fontFamily: 'Gotham-Bold',
+                    fontFamily: theme.fonts.bold,
                     fontSize: '18px',
-                    fill: '#ffffff',
+                    fill: theme.colors.text.light,
                     pointerEvents: 'none',
                     letterSpacing: '2px',
                     textTransform: 'uppercase'
