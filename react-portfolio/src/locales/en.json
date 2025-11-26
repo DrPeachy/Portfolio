@@ -94,6 +94,17 @@
       "restaurant": "Restaurant",
       "Boxing": "Goblin vs. Moai"
     }
+  },
+
+  "resume": {
+    "title": "My Resume",
+    "instructions": "Hover over the card to preview or download the PDF. You can download resumes in two languages: English and Chinese.",
+    "english": "English Version",
+    "chinese": "Chinese Version",
+    "buttons": {
+      "download": "Download",
+      "preview": "Preview"
+    }
   }
 
 }
