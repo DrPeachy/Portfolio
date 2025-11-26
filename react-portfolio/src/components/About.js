@@ -32,9 +32,9 @@ const SectionWrapper = styled.section`
 `;
 
 const MainTitle = styled.h1`
-  font-family: 'Gotham-Thin', sans-serif;
+  font-family: ${({theme}) => theme.fonts.thin};
   font-size: 4rem;
-  color: #111;
+  color: ${({theme}) => theme.colors.text.main};
   margin-bottom: 1.5rem;
   letter-spacing: -2px;
   line-height: 1;
@@ -45,19 +45,19 @@ const MainTitle = styled.h1`
 `;
 
 const SubTitle = styled.h2`
-  font-family: 'Gotham-Light', sans-serif;
+  font-family: ${({theme}) => theme.fonts.heavy};
   font-size: 2rem;
-  color: #3798ff; /* 用你的主色强调小标题 */
+  color: ${({theme}) => theme.colors.text.main}; /* 用你的主色强调小标题 */
   margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 2px;
 `;
 
 const Paragraph = styled.p`
-  font-family: 'Gotham-Book', sans-serif; /* 用 Book 字重，比 Thin 好读 */
+  font-family: ${({theme}) => theme.fonts.book}; /* 用 Book 字重，比 Thin 好读 */
   font-size: 1.1rem;
   line-height: 1.8;
-  color: #444; /* 不要纯黑，深灰更有质感 */
+  color: ${({theme}) => theme.colors.text.secondary}; /* 不要纯黑，深灰更有质感 */
   white-space: pre-line;
   
   /* 首字下沉效果（可选，很杂志风） */

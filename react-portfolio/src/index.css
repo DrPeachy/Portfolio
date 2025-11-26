@@ -120,25 +120,39 @@ a {
 }
 
 /* =========================================
-   3. 自定义滚动条 (Custom Scrollbar)
-   更加现代、极简的滚动条样式
+   3. 赛博魔改滚动条 (Cyber Scrollbar)
    ========================================= */
+/* 滚动条整体宽度 */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 8px; /* 极细，只有8px */
+  height: 8px; /* 横向滚动条高度 */
 }
 
+/* 滚动条轨道 (Track) */
 ::-webkit-scrollbar-track {
-  background: #e0e0e0;
+  background: transparent; /* 完全透明，像悬浮一样 */
+  /* 也可以用极淡的背景：background: rgba(0, 0, 0, 0.05); */
 }
 
+/* 滚动条滑块 (Thumb) */
 ::-webkit-scrollbar-thumb {
-  background: #999;
-  border-radius: 4px;
-  transition: background 0.3s ease;
+  background: rgba(0, 0, 0, 0.2); /* 默认是半透明深灰 */
+  border-radius: 10px; /* 这种圆角像药丸 */
+  
+  /* 增加一点内边距，让滑块看起来像悬浮在轨道中间 */
+  background-clip: padding-box; 
+  border: 1px solid transparent; 
 }
 
+/* 鼠标悬停在滑块上 */
 ::-webkit-scrollbar-thumb:hover {
-  background: #3798ff; /* 悬停变蓝 */
+  background: #3798ff; /* 悬停变电光蓝 */
+  border: 0; /* 移除透明边框，让蓝色填满 */
+}
+
+/* 鼠标悬停在轨道上时，滑块稍微变深一点 (可选) */
+::-webkit-scrollbar-track:hover ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4);
 }
 
 /* =========================================

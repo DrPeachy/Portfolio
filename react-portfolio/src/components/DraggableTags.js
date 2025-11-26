@@ -1,204 +1,294 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
-import './DraggableTags.css';
+import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-const DraggableTags = ({ tags, colors, background, index, textureUrl = "", width = 500, height = 470, playLink = "#" }) => {
+// === Styled Components ===
+const Container = styled.div`
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: inset 0 0 50px rgba(55, 152, 255, 0.05);
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+`;
+
+const DraggableTags = ({ tags, colors, width = 500, height = 470, playLink = "#" }) => {
   const containerRef = useRef(null);
-  const MINDISTANCE = 70;
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
   const { t } = useTranslation();
+  
+  const blobsRef = useRef([]);
+  const linesRef = useRef(null); // 用于绘制连线的 canvas 或者 SVG group
 
+  // 初始化数据
   useEffect(() => {
-    if (!containerRef.current) return;
+    const newBlobs = tags.map((tag, i) => ({
+      id: i,
+      tag: tag,
+      // 初始位置：分散在画布周围，而不是挤在中间
+      x: Math.random() * width,
+      y: Math.random() * height,
+      // 初始速度：极慢，营造漂浮感
+      vx: (Math.random() - 0.5) * 0.1,
+      vy: (Math.random() - 0.5) * 0.1,
+      radius: Math.max(35, Math.min(tag.length * 7, 55)),
+      color: colors[i % colors.length],
+      phase: Math.random() * Math.PI * 2,
+      opacity: 0, // 初始透明，用于入场动画
+      scale: 0    // 初始缩小
+    }));
 
-    const groups = containerRef.current.querySelectorAll(`.blob-group-${index}`);
-    groups.forEach((group, i) => {
-      gsap.fromTo(
-        group,
-        {
-          rotation: 0,
-        },
-        {
-          rotation: gsap.utils.random(-30, 30),
-          transformOrigin: `${gsap.utils.random(30, 70)}% ${gsap.utils.random(30, 70)}%`,
-          duration: gsap.utils.random(8, 13),
-          ease: 'sine.inOut',
-          repeat: -1,
-          yoyo: true,
-        }
-      );
+    // Play 按钮 (核心节点)
+    newBlobs.push({
+      id: 'play',
+      tag: t("game.play"),
+      x: width / 2,
+      y: height / 2,
+      vx: 0,
+      vy: 0,
+      radius: 50,
+      color: '#1a1a1a',
+      isPlay: true,
+      phase: 0,
+      opacity: 0,
+      scale: 0
     });
-  }, [tags, index]);
-  // Utility function to get a random offset for variability in placement
-  const getRandomOffset = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-  // Calculate grid positions for the circles
-  const calculatePositions = (numItems, canvasWidth, canvasHeight, radius) => {
-    const positions = [];
-    const cols = Math.ceil(Math.sqrt(numItems));
-    const rows = Math.ceil(numItems / cols);
-    const xSpacing = canvasWidth / (cols + 1);
-    const ySpacing = canvasHeight / (rows + 1);
+    blobsRef.current = newBlobs;
 
-    let index = 0;
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        if (index >= numItems) break;
-        const cx = (col + 1) * xSpacing + getRandomOffset(-radius / 2, radius / 2);
-        const cy = (row + 1) * ySpacing + getRandomOffset(-radius / 2, radius / 2);
-        positions.push({ cx, cy });
-        index++;
+    // 入场动画：一个个弹出来
+    newBlobs.forEach((blob, i) => {
+      gsap.to(blob, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        delay: i * 0.1,
+        ease: "back.out(1.7)",
+        onUpdate: () => {
+           // 这是一个 hack，为了让 gsap 更新 plain object 的属性也能触发 react 重绘？
+           // 其实不需要，因为我们在下面的 RAF 里会读取这些值
+        }
+      });
+    });
+
+  }, [tags, width, height, colors, t]);
+
+  // 物理引擎循环
+  useEffect(() => {
+    const svg = containerRef.current.querySelector('svg');
+    const linesGroup = svg.querySelector('.lines-group');
+    let animationFrameId;
+
+    const update = () => {
+      if (!blobsRef.current.length) return;
+
+      // 清空连线
+      while (linesGroup.firstChild) {
+        linesGroup.removeChild(linesGroup.firstChild);
       }
-    }
-    return positions;
+
+      blobsRef.current.forEach((blob, i) => {
+        // --- 1. 物理计算 ---
+        
+        // 基础漂浮 (Perlin Noise 替代品)
+        blob.vx += Math.sin(Date.now() * 0.001 + blob.phase) * 0.002;
+        blob.vy += Math.cos(Date.now() * 0.001 + blob.phase) * 0.002;
+
+        // 边界力 (软边界)
+        const margin = blob.radius + 10;
+        if (blob.x < margin) blob.vx += 0.02;
+        if (blob.x > width - margin) blob.vx -= 0.02;
+        if (blob.y < margin) blob.vy += 0.02;
+        if (blob.y > height - margin) blob.vy -= 0.02;
+
+        // Play 按钮始终回归中心
+        if (blob.isPlay) {
+            blob.vx += (width / 2 - blob.x) * 0.005;
+            blob.vy += (height / 2 - blob.y) * 0.005;
+        }
+
+        // 鼠标交互 (平滑吸引)
+        const dx = mousePos.x - blob.x;
+        const dy = mousePos.y - blob.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const maxDist = 250; // 感应半径
+
+        if (dist < maxDist) {
+          // 距离越近，吸力越强，但设有上限防止抽搐
+          const force = (maxDist - dist) / maxDist; 
+          blob.vx += dx * force * 0.0005; 
+          blob.vy += dy * force * 0.0005;
+        }
+
+        // 互斥力 (碰撞避免)
+        blobsRef.current.forEach((other, j) => {
+          if (i === j) return;
+          const idx = blob.x - other.x;
+          const idy = blob.y - other.y;
+          const idist = Math.sqrt(idx * idx + idy * idy);
+          const minDist = blob.radius + other.radius + 5; // 留点缝隙
+
+          if (idist < minDist) {
+            const angle = Math.atan2(idy, idx);
+            const tx = Math.cos(angle) * 0.05; 
+            const ty = Math.sin(angle) * 0.05;
+            blob.vx += tx;
+            blob.vy += ty;
+          } else if (idist < 150 && !blob.isPlay && !other.isPlay) {
+             // --- 连线逻辑 ---
+             // 如果两个普通 Tag 靠得近，画一条线
+             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+             line.setAttribute("x1", blob.x);
+             line.setAttribute("y1", blob.y);
+             line.setAttribute("x2", other.x);
+             line.setAttribute("y2", other.y);
+             // 距离越近线越明显
+             const opacity = (150 - idist) / 150 * 0.2; 
+             line.setAttribute("stroke", "#3798ff");
+             line.setAttribute("stroke-width", "1");
+             line.setAttribute("stroke-opacity", opacity);
+             linesGroup.appendChild(line);
+          }
+        });
+
+        // 阻力
+        blob.vx *= 0.95;
+        blob.vy *= 0.95;
+
+        // 更新位置
+        blob.x += blob.vx;
+        blob.y += blob.vy;
+
+        // --- 2. 渲染更新 ---
+        const group = svg.getElementById(`blob-${blob.id}`);
+        if (group) {
+          // 使用 transform 移动 group
+          group.setAttribute('transform', `translate(${blob.x}, ${blob.y}) scale(${blob.scale})`);
+          group.style.opacity = blob.opacity;
+          
+          // 只有 Play 按钮有呼吸效果
+          if (blob.isPlay) {
+             const pulse = 1 + Math.sin(Date.now() * 0.005) * 0.05;
+             // 我们不能直接改 scale，因为上面用了 scale 属性做入场动画
+             // 所以我们操作内部的特定元素，比如外圈
+             const outerRing = group.querySelector('.play-pulse');
+             if(outerRing) {
+                 outerRing.setAttribute('transform', `scale(${pulse})`);
+             }
+          }
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(update);
+    };
+
+    update();
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [mousePos, width, height]);
+
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
   };
 
-  // Calculate positions for the circles
-  const positions = calculatePositions(tags.length + 1, width, height, 65);
+  const handleMouseLeave = () => {
+    setMousePos({ x: -1000, y: -1000 });
+  };
 
-  // Utility function to get a random item from an array
-  const getRandomItemFromArray = (array) => array[Math.floor(Math.random() * array.length)];
-
-  //
-  const onPlayClick = (e, link) => {
-    e.preventDefault();
-    console.log("Play clicked");
+  const onPlayClick = (link) => {
     window.open(link, '_blank');
   };
 
   return (
-    <div
+    <Container
       ref={containerRef}
-      className="loading_cont"
-      style={{
-        background: background || 'transparent',
-        width: `${width}px`,
-        height: `${height}px`,
-        margin: '0px',
-        position: 'relative'
-      }}
+      style={{ width, height }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
-      {textureUrl && (
-        <div
-          className="texture-overlay"
-          style={{
-            background: `url(${textureUrl}) repeat center center`,
-          }}
-        ></div>
-      )}
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" id={`loader-${index}`} width={width} height={height}
+      <svg width="100%" height="100%" style={{ overflow: 'visible' }}>
+        {/* 连线层在最下面 */}
+        <g className="lines-group"></g>
 
-      >
-        <defs>
-          <filter id={'goo'}>
-            <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="15" />
-            <feColorMatrix
-              in="blur"
-              mode="matrix"
-              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 30 -10"
-              result="goo"
-            />
-            <feBlend in2="goo" in="SourceGraphic" result="mix" />
-          </filter>
-          <linearGradient id={`MyGradient-${index}`}>
-            <stop offset="0%" stopColor="#ebabff" />
-            <stop offset="70%" stopColor="#3798ff" />
-            <stop offset="100%" stopColor="#a8d2ff" />
-          </linearGradient>
-        </defs>
-        <mask id={`maska-${index}`}>
-          <g className="blobs">
-            {tags.map((tag, i) => {
-              // Determine circle radius based on tag length
-              const radius = Math.max(55, Math.min(tag.length * 8, 80)); // Set radius between 20 and 80 based on tag length
-
-              // Use pre-calculated positions
-              const { cx, cy } = positions[i];
-
-              const color = getRandomItemFromArray(colors);
-
-              return (
-                <g key={i} className={`blob-group-${index}`} style={{ transform: `translate(${cx}px, ${cy}px)` }}>
-                  <circle
-                    className="blob"
-                    r={radius}
-                    fill={color} // Random color from provided colors list
-                  />
-                  <text
-                    x="0"
-                    y="0"
-                    textAnchor="middle"
-                    dy=".3em"
-                    fontSize="22"
-                    fill="#ffffff"
-                  >
-                    {tag.length <= radius / 4 ? tag : tag.substring(0, radius / 4) + '...'}
-                  </text>
-                </g>
-              );
-            })}
-            {/* Additional "play" button circle */}
-            {(() => {
-              // Calculate position for the "play" button that is not too close to other elements
-              const { cx, cy } = positions[tags.length];
-
-              return (
-                <g
-                  className={`blob-group-${index}-play`}
-                  style={{ transform: `translate(${cx}px, ${cy}px)`, cursor: 'pointer', pointerEvents: 'auto' }}
-                  onClick={onPlayClick}
-                  key="play-button"
+        {/* 球体层 */}
+        {blobsRef.current.map((blob) => (
+          <g 
+            key={blob.id} 
+            id={`blob-${blob.id}`} 
+            style={{ cursor: blob.isPlay ? 'pointer' : 'default' }}
+            onClick={blob.isPlay ? () => onPlayClick(playLink) : undefined}
+          >
+            {/* 普通 Tag 样式 */}
+            {!blob.isPlay && (
+              <>
+                <circle
+                  r={blob.radius}
+                  fill="rgba(55, 152, 255, 0.05)"
+                  stroke="#3798ff"
+                  strokeWidth="1"
+                  strokeOpacity="0.5"
+                />
+                <text
+                  dy=".35em"
+                  textAnchor="middle"
+                  style={{
+                    fontFamily: 'Gotham-Book',
+                    fontSize: '14px',
+                    fill: '#1a1a1a',
+                    pointerEvents: 'none',
+                    letterSpacing: '1px'
+                  }}
                 >
-                  <circle
-                    className="blob-play"
-                    r={60}
-                    fill="#111111"
-                    style={{ pointerEvents: 'auto', cursor: 'pointer' }}
-                    onClick={() => onPlayClick(playLink)}
-                  />
-                  <text
-                    x="0"
-                    y="0"
-                    textAnchor="middle"
-                    dy=".3em"
-                    fontSize="22"
-                    fill="#ffffff"
-                  >
-                    {t("game.play")}
-                  </text>
-                </g>
-              );
-            })()}
+                  {blob.tag}
+                </text>
+              </>
+            )}
+
+            {/* Play 按钮样式 */}
+            {blob.isPlay && (
+              <>
+                {/* 呼吸光环 */}
+                <circle 
+                    className="play-pulse"
+                    r={blob.radius + 5} 
+                    fill="none" 
+                    stroke="#3798ff" 
+                    strokeWidth="1" 
+                    strokeOpacity="0.3"
+                />
+                {/* 核心实心圆 */}
+                <circle
+                  r={blob.radius}
+                  fill="#1a1a1a"
+                  stroke="#3798ff"
+                  strokeWidth="2"
+                />
+                <text
+                  dy=".35em"
+                  textAnchor="middle"
+                  style={{
+                    fontFamily: 'Gotham-Bold',
+                    fontSize: '18px',
+                    fill: '#ffffff',
+                    pointerEvents: 'none',
+                    letterSpacing: '2px',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  {blob.tag}
+                </text>
+              </>
+            )}
           </g>
-        </mask>
-        <rect x="0" y="0"
-          mask={`url(#maska-${index})`}
-          fill={`url(#MyGradient-${index})`}
-          width={width}
-          height={height}
-          style={{ pointerEvents: 'none' }}
-        />
-
-        {/* 添加透明的可点击图层 */}
-        <g className="clickable-layer">
-          {(() => {
-            const { cx, cy } = positions[tags.length];
-
-            return (
-              <circle
-                key="play-click-layer"
-                cx={cx}
-                cy={cy}
-                r={60}
-                fill="transparent"
-                style={{ pointerEvents: 'auto' }}
-                onClick={(e) => onPlayClick(e, playLink)}
-              />
-            );
-          })()}
-        </g>
+        ))}
       </svg>
-    </div>
+    </Container>
   );
 };
 

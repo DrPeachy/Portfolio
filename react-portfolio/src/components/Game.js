@@ -6,6 +6,7 @@ import { GridContainer } from './styled/Layouts';
 
 import FadeInScaleUpOnScroll from './FadeInScaleUpOnScroll';
 import DraggableTags from './DraggableTags';
+import TiltCard from './TiltCard';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslation } from 'react-i18next';
@@ -18,8 +19,9 @@ const SectionTitle = styled.h2`
   text-align: center;
   margin-top: 4rem;
   margin-bottom: 1rem;
-  font-family: 'Gotham-Thin', sans-serif; /* 确保用上你的高级字体 */
+  font-family: ${({theme}) => theme.fonts.heavy};
   font-size: 2.5rem;
+  color: ${({theme}) => theme.colors.text.main};
   letter-spacing: 2px;
   text-transform: uppercase;
 `;
@@ -83,7 +85,7 @@ const Game = () => {
             
             {/* 左侧：图片区域 */}
             <FadeInScaleUpOnScroll start="top 80%">
-                <Image 
+                <TiltCard 
                   src={gameImages[gameInfo.imageFileName]} 
                   alt={gameInfo.title} 
                   fluid // Bootstrap Image 的属性，保持响应式

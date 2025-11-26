@@ -49,7 +49,7 @@ const MainTitle = styled.h1`
   font-family: ${props => props.theme.fonts.thin}; 
   /* 响应式巨大字号：最小 4rem，最大 11rem，随屏幕宽度变化 */
   font-size: clamp(4rem, 13vw, 11rem); 
-  color: #1a1a1a; /* 纯粹的深灰，不要纯黑 */
+  color: ${props => props.theme.colors.text.main};
   text-transform: uppercase;
   margin: 0;
   letter-spacing: -0.04em; /* 负字间距，让字母紧挨着，更现代 */
