@@ -61,6 +61,28 @@
     }
   },
 
+  "showcase":{
+    "checkout": "Check Out My Projects",
+    "showcaseData":{
+      "PBR": {
+        "title": "PBR Rendering - OpenGL",
+        "description": "A PBR renderer implemented using OpenGL and C++, based on the LearnOpenGL tutorial. It features a complete PBR pipeline, including model and material data processing, GLSL shader programming for the GPU, lighting calculations based on the Cook-Torrance BRDF model, and Image-Based Lighting (IBL) for realistic environmental reflections. The project uses the Suzanne model with custom textures created in Adobe Substance Painter and irradiance maps generated from a Shanghai nightscape cubemap using a tool like Lys/CMFT."
+      },
+      "Shader": {
+        "title": "Shader Playground",
+        "description": "A collection of shader experiments in Unity, primarily inspired by Zhuang Dong's shader development tutorials on Bilibili. This project explores various shader effects written in ShaderLab, ranging from basic Lambertian lighting to advanced techniques like MatCap, cubemaps, and custom blend modes for special effects."
+      },
+      "Resume": {
+        "title": "Resume Saver - MERN Stack",
+        "description": "A full-stack resume generator web application built with the MERN stack (MongoDB, Express, React, Node.js) and Material UI. It features user authentication via Passport.js, a dashboard for managing multiple resume workspaces, and a powerful editor. Users can input resume details manually or import them from an uploaded PDF (with a clipboard feature for easy data extraction). The app supports real-time formatting adjustments in an inspector panel and generates downloadable PDFs using PDFKit. References include NYU Resume Guide, PDF.js, and pdf-parse."
+      },
+      "RayTracing": {
+        "title": "Ray Tracing - OpenGL",
+        "description": "A GPU-based Ray Tracing renderer implemented in C++ and OpenGL, developed as a final project for the NYU Graphics course. The project involves defining geometry and lighting classes on the CPU and transferring data to the GPU via buffers. Since GPU shaders do not support recursion, the ray tracing logic—including intersection testing and specular reflection—is implemented using iterative loops and depth management to simulate recursive light paths."
+      }
+    }
+  },
+
   "model":{
     "modeldata":{
       "Chocobo": "Chocobo",

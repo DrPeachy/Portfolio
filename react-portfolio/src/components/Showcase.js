@@ -50,8 +50,18 @@ const InfoColumn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start; /* 左对齐 */
   width: 100%; /* 确保填满 Grid 单元格 */
+
+  /* 核心修改：根据位置决定对齐方向 */
+  /* 如果在右侧 ($reversed=true)，则右对齐；否则左对齐 */
+  align-items: ${props => props.$reversed ? 'flex-end' : 'flex-start'};
+  text-align: ${props => props.$reversed ? 'right' : 'left'};
+
+  /* 手机端强制左对齐 */
+  @media (max-width: 960px) {
+    align-items: flex-start;
+    text-align: left;
+  }
 `;
 
 const ProjectTitle = styled.h2`
@@ -124,26 +134,35 @@ const IndexNumber = styled.div`
   color: rgba(0,0,0,0.03); /* 极淡的背景字 */
   position: absolute;
   top: -4rem;
-  left: -2rem;
   z-index: -1;
   line-height: 1;
   pointer-events: none;
+
+  /* 核心修改：根据对齐方向改变位置 */
+  /* 如果右对齐，数字也应该跑到文字的右边去 */
+  ${props => props.$reversed ? css`
+    right: -2rem;
+    left: auto;
+  ` : css`
+    left: -2rem;
+    right: auto;
+  `}
 `;
 
 // === Data Management ===
 
 const staticShowcaseData = {
-  PBRrendering: {
+  PBR: {
     link: 'https://github.com/VChhh/PBR_Final_Project',
     imagesFolderName: 'PBR',
     localizationKey: 'PBR'
   },
-  ShaderPlayground: {
+  Shader: {
     link: 'https://github.com/DrPeachy/ShaderPlayground',
     imagesFolderName: 'Shader',
     localizationKey: 'Shader'
   },
-  ResumeSaver: {
+  Resume: {
     link: 'https://github.com/DrPeachy/ResumeSaver',
     imagesFolderName: 'ResumeSaver',
     localizationKey: 'Resume'
@@ -194,20 +213,20 @@ const Showcase = () => {
             <ProjectRow $reversed={isReversed}>
               
               {/* 1. 文字信息区 */}
-              <InfoColumn>
+              <InfoColumn $reversed={isReversed}>
                 <div style={{ position: 'relative' }}>
-                    <IndexNumber>{String(index + 1).padStart(2, '0')}</IndexNumber>
-                    <ProjectTitle>{t(project.localizationKey)}</ProjectTitle>
+                    <IndexNumber $reversed={isReversed}>{String(index + 1).padStart(2, '0')}</IndexNumber>
+                    <ProjectTitle>{t(`showcase.showcaseData.${project.localizationKey}.title`)}</ProjectTitle>
                 </div>
                 
                 <ProjectDesc>
                     {/* 如果你的 i18n 有 description，可以在这里加 */}
-                    {t(`${project.localizationKey}_desc`) || "A detailed exploration of graphics programming techniques and visual fidelity."}
+                    {t(`showcase.showcaseData.${project.localizationKey}.description`) || "A detailed exploration of graphics programming techniques and visual fidelity."}
                 </ProjectDesc>
 
                 <ProjectLink href={project.link} target="_blank" rel="noopener noreferrer">
                   <FaGithub style={{ fontSize: '1.1em' }}/> 
-                  <span>View Source Code</span>
+                  <span>{t('showcase.checkout')}</span>
                 </ProjectLink>
               </InfoColumn>
 

@@ -62,24 +62,23 @@
   },
 
   "showcase": {
-    "checkout": "查看作品",
-
-    "showcaseData":{
-      "PBR":{
+    "checkout": "前往查看项目REPO",
+    "showcaseData": {
+      "PBR": {
         "title": "PBR渲染-OpenGL",
-        "description": "参照learnOpenGL的PBR渲染教程，使用OpenGL实现的PBR渲染器。使用C++处理模型以及材质数据以传入GPU，并于GPU端编写着色器。根据Cook-Torrance模型计算光照，使用IBL技术进行环境光照渲染。"
+        "description": "基于C++和OpenGL，参照LearnOpenGL官方教程实现的PBR渲染器（包含IBL）。项目实现了完整的PBR流程，包括使用C++处理模型及材质数据并传输至GPU，以及在GPU端编写GLSL着色器。光照计算基于Cook-Torrance BRDF模型，并利用IBL技术实现逼真的环境光照渲染。模型使用了Suzanne，材质由Adobe Substance Painter制作，辐照度图是利用Lys/CMFT等工具基于一张上海夜景的Cubemap生成的。"
       },
-      "Shader":{
+      "Shader": {
         "title": "着色器练手项目",
-        "description": "在Unity中实现各种不同效果的着色器，主要参照庄董的着色器开发教程，使用ShaderLab语言进行着色器编写。"
+        "description": "在Unity中实现的各类着色器效果集合，主要灵感来源于Bilibili上庄董的着色器开发教程。该项目使用ShaderLab语言编写，涵盖了从基础的兰伯特光照模型到MatCap、Cubemap反射以及用于特效制作的各种混合模式（Blend Modes）等高级技术。"
       },
-      "Resume":{
+      "Resume": {
         "title": "MERN全栈项目-简历救星",
-        "description": "使用MERN全栈技术栈实现的简历生成器，支持用户注册、登录、创建简历、调整简历格式、实时生成PDF格式文件等功能。使用Passport库处理用户身份验证，使用Mongoose库处理MongoDB数据库操作。前端使用React框架以及Material UI作为CSS框架，后端使用Node.js和Express框架。"
+        "description": "基于MERN技术栈（MongoDB, Express, React, Node.js）和Material UI开发的全栈简历生成器Web应用。项目使用Passport库处理用户身份验证，支持用户注册登录。用户可以进入仪表盘创建多个工作区（Workspace），每个工作区对应一份简历。编辑器支持手动输入信息或通过上传PDF文件一键导入（左侧设有信息剪切板，方便用户选择性复制粘贴）。用户可在右侧检查器中调整格式，点击应用后即可在预览界面实时查看并下载PDF格式的简历。参考资料包括NYU简历指南、PDF.js、PDFKit、pdf-parse和Multer等。"
       },
-      "RayTracing":{
+      "RayTracing": {
         "title": "光线追踪-OpenGL",
-        "description": "使用OpenGL实现的光线追踪渲染器。在C++中手动计算网格数据并传入Buffer对象，使用OpenGL进行渲染。实现了光线追踪的基本原理，包括光线与物体的相交检测、镜面反射等。"
+        "description": "基于C++和OpenGL实现的GPU端光线追踪渲染器，这是我在NYU计算机图形学课程的期末作业。项目在CPU端定义了几何体和光照类，并将数据通过Buffer对象传输至GPU。由于GPU着色器不支持递归，我们通过循环模拟递归并设置深度限制来实现光线追踪的核心逻辑，包括光线与物体的相交检测、镜面反射等效果。"
       }
     }
   },

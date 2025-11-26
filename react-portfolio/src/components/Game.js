@@ -19,7 +19,7 @@ const SectionTitle = styled.h2`
   text-align: center;
   margin-top: 4rem;
   margin-bottom: 1rem;
-  font-family: ${({theme}) => theme.fonts.heavy};
+  font-family: ${props => props.theme.fonts.thin};
   font-size: 2.5rem;
   color: ${({theme}) => theme.colors.text.main};
   letter-spacing: 2px;
