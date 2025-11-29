@@ -66,9 +66,11 @@ const GeometryShape = ({ yOffset, initialAngle, color, geometryType, materialTyp
   const rotateFactor = 0.2;
 
   useFrame((state, delta) => {
+    const fixedDelta = Math.min(delta, 0.1); // 限制最大 delta，防止帧率骤降时动画跳动
+    
     if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.1;
-      meshRef.current.rotation.y += delta * 0.15;
+      meshRef.current.rotation.x += fixedDelta * 0.1;
+      meshRef.current.rotation.y += fixedDelta * 0.15;
       
       const mouseX = state.pointer.x;
       const mouseY = state.pointer.y;
@@ -170,8 +172,8 @@ const ThreeBackground = () => {
         {/* === SCENE OBJECTS === */}
         <GeometryShape initialAngle={0} yOffset={1.2} color="#3798ff" geometryType="torus" materialType="rubber" />
         <GeometryShape initialAngle={Math.PI * 0.5} yOffset={-1} color="#ff3798" geometryType="icosahedron" materialType="glass" />
-        <GeometryShape initialAngle={Math.PI} yOffset={-2} color="#e0e0e0" geometryType="octahedron" materialType="glass" />
-        <GeometryShape initialAngle={Math.PI * 1.5} yOffset={2} color="#a8d2ff" geometryType="capsule" materialType="rubber" />
+        <GeometryShape initialAngle={Math.PI} yOffset={-2} color="#ffbcf7" geometryType="octahedron" materialType="glass" />
+        <GeometryShape initialAngle={Math.PI * 1.5} yOffset={2} color="#ffffff" geometryType="capsule" materialType="rubber" />
 
         <Environment resolution={512}>
           <group rotation={[-Math.PI / 3, 0, 1]}>
