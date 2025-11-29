@@ -61,7 +61,7 @@ const SubWrapper = styled.div`
 `;
 
 const SubTitle = styled.p`
-  font-family: ${props => props.theme.fonts.medium}; /* 用稍微粗一点的字重做对比 */
+  font-family: ${props => props.theme.fonts.book}; /* 用稍微粗一点的字重做对比 */
   font-size: 0.9rem;
   letter-spacing: 0.6em; /* 极宽的字间距 */
   text-transform: uppercase;

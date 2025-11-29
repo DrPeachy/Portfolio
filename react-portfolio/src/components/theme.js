@@ -20,22 +20,22 @@ export const theme = {
     thin: "'Gotham-Thin', 'Alibaba-Thin', sans-serif",
     
     // 细体 (45/300)
-    light: "'Gotham-Light', 'Alibaba-Light', sans-serif",
+    // light: "'Gotham-Light', 'Alibaba-Light', sans-serif",
     
     // 常规/正文 (55/400) - Gotham 的 "Book" 对应标准 Regular
     book: "'Gotham-Book', 'Alibaba-Regular', sans-serif",
     
     // 中等 (65/500)
-    medium: "'Gotham-Medium', 'Alibaba-Medium', sans-serif",
+    // medium: "'Gotham-Medium', 'Alibaba-Medium', sans-serif",
     
     // 粗体 (85/700)
     bold: "'Gotham-Bold', 'Alibaba-Bold', sans-serif",
     
     // 特粗 (95/800)
-    extraBold: "'Gotham-Black', 'Alibaba-ExtraBold', sans-serif",
+    // extraBold: "'Gotham-Black', 'Alibaba-ExtraBold', sans-serif",
     
     // 极粗 (105/900)
-    heavy: "'Gotham-Ultra', 'Alibaba-Heavy', sans-serif", // Ultra 对应 Heavy
+    // heavy: "'Gotham-Ultra', 'Alibaba-Heavy', sans-serif", // Ultra 对应 Heavy
   },
   
   // 3. 间距系统 (Spacing) - 保持韵律感

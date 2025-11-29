@@ -58,7 +58,7 @@ const importAll = (r) => {
   return images;
 };
 
-const images = importAll(require.context('../img/gameGallery', false, /\.(png|jpe?g)$/));
+const images = importAll(require.context('../img/gameGallery', false, /\.(webp)$/));
 
 const GameGallery = () => {
   const containerRef = useRef(null);

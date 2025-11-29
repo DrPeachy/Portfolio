@@ -38,7 +38,7 @@ const Title = styled.h1`
 `;
 
 const Subtitle = styled.p`
-  font-family: ${props => props.theme.fonts.light};
+  font-family: ${props => props.theme.fonts.book};
   color: ${props => props.theme.colors.text.secondary};
   font-size: 1.2rem;
   letter-spacing: 2px;
@@ -73,7 +73,7 @@ const ModelInfo = styled.div`
 `;
 
 const ModelName = styled.h3`
-  font-family: ${props => props.theme.fonts.medium};
+  font-family: ${props => props.theme.fonts.book};
   font-size: 1.5rem;
   color: ${props => props.theme.colors.text.main};
   margin: 0;
@@ -109,7 +109,7 @@ const importAll = (r) => {
 };
 
 // 预加载图片
-const imagesData = importAll(require.context('../img/models', false, /\.(png|jpe?g|svg)$/));
+const imagesData = importAll(require.context('../img/models', false, /\.(webp)$/));
 
 const Model = () => {
   const { t } = useTranslation();

@@ -45,7 +45,7 @@ const MainTitle = styled.h1`
 `;
 
 const SubTitle = styled.h2`
-  font-family: ${({theme}) => theme.fonts.heavy};
+  font-family: ${({theme}) => theme.fonts.bold};
   font-size: 2rem;
   color: ${({theme}) => theme.colors.text.main}; /* 用你的主色强调小标题 */
   margin-bottom: 1rem;

@@ -93,7 +93,7 @@ const ProjectLink = styled.a`
   border: 1px solid ${props => props.theme.colors.text.main};
   color: ${props => props.theme.colors.text.main};
   text-transform: uppercase;
-  font-family: ${props => props.theme.fonts.medium};
+  font-family: ${props => props.theme.fonts.book};
   font-size: 0.9rem;
   letter-spacing: 2px;
   border-radius: 50px;
@@ -131,7 +131,7 @@ const ProjectLink = styled.a`
 const IndexNumber = styled.div`
   font-family: ${props => props.theme.fonts.bold};
   font-size: 8rem;
-  color: rgba(0,0,0,0.03); /* 极淡的背景字 */
+  color: rgba(0,0,0,0.2); /* 极淡的背景字 */
   position: absolute;
   top: -4rem;
   z-index: -1;
@@ -176,7 +176,7 @@ const staticShowcaseData = {
 
 const importAllImages = () => {
   try {
-    const context = require.context('../img/showcase', true, /\.(png|jpe?g|svg)$/);
+    const context = require.context('../img/showcase', true, /\.(webp)$/);
     let imagesByFolder = {};
     context.keys().forEach((key) => {
       const parts = key.split('/');

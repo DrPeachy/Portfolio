@@ -151,7 +151,7 @@ const Label = styled.div`
   width: 100%; /* 确保占满宽度以便居中 */
   text-align: center;
   
-  font-family: ${props => props.theme.fonts.medium};
+  font-family: ${props => props.theme.fonts.book};
   color: ${props => props.theme.colors.text.main};
   font-size: 1.2rem;
   letter-spacing: 2px;

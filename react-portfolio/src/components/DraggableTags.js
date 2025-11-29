@@ -241,7 +241,7 @@ const DraggableTags = ({ tags, colors, width = 500, height = 470, playLink = "#"
                   dy=".35em"
                   textAnchor="middle"
                   style={{
-                    fontFamily: theme.fonts.medium,
+                    fontFamily: theme.fonts.book,
                     fontSize: '14px',
                     fill: '#1a1a1a',
                     pointerEvents: 'none',

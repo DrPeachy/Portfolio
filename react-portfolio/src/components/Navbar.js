@@ -39,7 +39,7 @@ const NavWrapper = styled.nav`
 
 // Logo 样式
 const Logo = styled(Link)`
-  font-family: ${props => props.theme.fonts.medium};
+  font-family: ${props => props.theme.fonts.book};
   font-size: 1.5rem;
   color: ${props => props.$scrolled ? props.theme.colors.text.light : props.theme.colors.text.main};
   text-decoration: none;
