@@ -18,6 +18,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Footer from './components/Footer';
 import GameDebugger from './components/GameDebugger';
 import "./i18n";
+import ThreeBackground from './components/ThreeBackground';
 
 const AppLayout = styled.div`
   min-height: 100vh; /* 确保至少占满一屏 */
@@ -51,8 +52,9 @@ function App() {
         {/* 用 AppLayout 替换原来的 <div className="App"> */}
         <AppLayout>
           <ScrollToTop />
-          <MyNavbar />
           <Cursor />
+          <ThreeBackground />
+          <MyNavbar />
           <GameDebugger /> {/* 这个最好确保它是 fixed 或 absolute 的 */}
 
           {/* 把 Routes 包裹在 MainContent 里 */}

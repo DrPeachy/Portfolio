@@ -7,7 +7,7 @@ import { PageWrapper } from './styled/Layouts';
 
 // 引入 PDF 文件
 import ResumeUS from "../resumes/resume - US25.3.29.pdf";
-import ResumeCN from "../resumes/resume - CN2025-3-24.pdf";
+import ResumeCN from "../resumes/resume - CN2025-8-13-1.pdf";
 
 // 引入预览图 (如果没有，请先用 null 占位，或者制作截图)
 const PreviewUS = null; 

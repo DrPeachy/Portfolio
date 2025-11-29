@@ -3,6 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Environment, ContactShadows, Sparkles, MeshTransmissionMaterial } from '@react-three/drei';
 import { EffectComposer, Bloom, ToneMapping, ChromaticAberration } from '@react-three/postprocessing';
 import * as THREE from 'three';
+import { use } from 'i18next';
+import { useLocation } from 'react-router-dom';
 
 // === 1. 几何体组件 (支持多种材质 + 平滑交互) ===
 const GeometryShape = ({ position, color, geometryType, materialType = 'rubber' }) => {
@@ -35,6 +37,7 @@ const GeometryShape = ({ position, color, geometryType, materialType = 'rubber' 
     switch (geometryType) {
       case 'torus': return <torusGeometry args={[1, 0.4, 64, 128]} />;
       case 'icosahedron': return <icosahedronGeometry args={[1, 0]} />;
+      case 'capsule': return <capsuleGeometry args={[0.5, 1, 5, 16, 1]} />;
       default: return <octahedronGeometry args={[1, 0]} />;
     }
   };
@@ -139,6 +142,9 @@ const Rig = () => {
 };
 
 const ThreeBackground = () => {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   return (
     <div style={{ 
       position: 'fixed', 
@@ -146,8 +152,12 @@ const ThreeBackground = () => {
       left: 0, 
       width: '100vw', 
       height: '100vh', 
-      zIndex: 10,
-      pointerEvents: 'none'
+      zIndex: -5,
+      pointerEvents: 'none',
+
+      // blur if not on home page
+      filter: isHome ? 'none' : 'blur(10px) brightness(1)',
+      transition: 'filter 0.8s ease-in-out, transform 0.8s ease-in-out',
     }}>
       <Canvas 
         shadows 
@@ -175,9 +185,9 @@ const ThreeBackground = () => {
         {/* 我把它改成了 glass 材质，你会看到光线穿过它，非常梦幻 */}
         <GeometryShape 
           position={[3.5, 0, 1]} 
-          color="#a8d2ff" 
+          color="#ff3798" 
           geometryType="icosahedron" 
-          materialType="glass" 
+          materialType="rubber" 
         />
         
         {/* 3. 灰色八面体 (塑料) - 背景衬托 */}
@@ -185,6 +195,14 @@ const ThreeBackground = () => {
           position={[-2.5, -3, -2]} 
           color="#e0e0e0" 
           geometryType="octahedron" 
+          materialType="glass" 
+        />
+
+        {/* 4 */}
+        <GeometryShape 
+          position={[1.7, 2, 0]} 
+          color="#a8d2ff" 
+          geometryType="capsule" 
           materialType="rubber" 
         />
 

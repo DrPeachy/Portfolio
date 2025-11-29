@@ -2,9 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-// 引入刚才写的 3D 背景
-import ThreeBackground from './ThreeBackground';
-
 // === Styled Components ===
 
 const HeroContainer = styled.div`
@@ -147,9 +144,6 @@ const HeroSection = () => {
 
   return (
     <HeroContainer>
-      {/* 3D 背景 */}
-      <ThreeBackground />
-
       <ContentWrapper>
         {/* 第一行：CHARLES */}
         <TextMask>
