@@ -17,7 +17,7 @@ pipeline {
             steps {
                 dir(env.SUB_FOLDER) {
                     // Install dependencies and build the React app
-                    powershell 'npm install'
+                    powershell 'npm install --legacy-peer-deps'
                     powershell 'npm run build'
                 }
             }
