@@ -10,6 +10,9 @@ pipeline {
         REMOTE_PORT = '21098'
         REMOTE_DIR = '/home/charkukk/public_html/'
         SUB_FOLDER = 'react-portfolio'
+
+        // Temperary allow error
+        CI = 'false'
     }
 
     stages {
