@@ -8,23 +8,17 @@ pipeline {
         REMOTE_USER = 'charkukk'
         REMOTE_HOST = 'charlesrealm.com'
         REMOTE_PORT = '21098'
-        REMOTE_DIR = '/home/charkukk/public_html/' 
+        REMOTE_DIR = '/home/charkukk/public_html/'
+        SUB_FOLDER = 'react-portfolio'
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Pull code from GitHub
-                git branch: 'main', url: 'https://github.com/yourname/portfolio.git'
-            }
-        }
-
         stage('Build') {
             steps {
-                // Provide Node environment
-                nodejs(nodeJSInstallationName: 'Node16') {
-                    sh 'npm install'
-                    sh 'npm run build'
+                dir(env.SUB_FOLDER) {
+                    // Install dependencies and build the React app
+                    powershell 'npm install'
+                    powershell 'npm run build'
                 }
             }
         }
@@ -40,7 +34,7 @@ pipeline {
                     // -P (大写) 是 scp 指定端口的参数 (ssh 是小写 -p)
                     // -r 代表递归拷贝 (文件夹)
                     powershell """
-                        scp -P ${REMOTE_PORT} -o StrictHostKeyChecking=no -r ./* ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}
+                        scp -P ${REMOTE_PORT} -o StrictHostKeyChecking=no -r ./${SUB_FOLDER}/build/* ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}
                     """
                 }
             }
