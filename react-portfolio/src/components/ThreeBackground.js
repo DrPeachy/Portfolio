@@ -146,7 +146,7 @@ const ThreeBackground = () => {
     <div style={{ 
       position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -5, pointerEvents: 'none',
       // 这里可以放一个很浅的底色，防止空隙漏出黑色，但主要视觉由 VolumetricFog 承担
-      background: '#d6f3ffff', 
+      background: '#fff1fdff', 
       filter: isHome ? 'none' : 'blur(10px) brightness(1)',
       transition: 'filter 0.8s ease-in-out',
     }}>
