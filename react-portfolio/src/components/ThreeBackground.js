@@ -12,7 +12,7 @@ function VolumetricFog() {
 
   return (
     <group ref={groupRef} position={[0, -2, 0]}>
-      <Clouds limit={200} range={200}>
+      <Clouds material={THREE.MeshStandardMaterial} limit={200} range={200}>
         
         <Cloud 
           seed={1}
@@ -20,7 +20,7 @@ function VolumetricFog() {
           speed={0.1}
           growth={4}
           volume={6}
-          // opacity={0.3}
+          opacity={0.3}
           bounds={[6, 2, 1]}
           color="hotpink"
           position={[-4, 0, -2]} 
@@ -32,7 +32,7 @@ function VolumetricFog() {
           speed={0.1} 
           growth={5} 
           volume={8} 
-          // opacity={0.2} 
+          opacity={0.2} 
           bounds={[6, 2, 1]} 
           color="blue"
           position={[4, 1, -3]} 
@@ -44,7 +44,7 @@ function VolumetricFog() {
           speed={0.05} 
           growth={6} 
           volume={3} 
-          // opacity={0.5} 
+          opacity={0.5} 
           bounds={[10, 10, 10]} 
           color="white" 
           position={[0, 0, -5]} 

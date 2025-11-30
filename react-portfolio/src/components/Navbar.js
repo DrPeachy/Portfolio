@@ -146,6 +146,16 @@ const MobileMenuOverlay = styled.div`
   transition: opacity 0.4s ease;
 `;
 
+const MobileMenuToggle = styled.div`
+  display: flex;
+  align-items: center;
+
+  /* 在大于 960px 的屏幕（桌面端）隐藏 */
+  @media (min-width: 961px) {
+    display: none;
+  }
+`;
+
 const MobileNavLink = styled(Link)`
   font-family: ${props => props.theme.fonts.thin};
   font-size: 2rem;
@@ -237,11 +247,11 @@ const MyNavbar = () => {
           </IconBtn>
 
           {/* 移动端汉堡按钮 (Desktop 隐藏) */}
-          <div className="d-md-none" style={{ display: 'flex' }}> 
-             <IconBtn onClick={toggleMobileMenu} $scrolled={scrolled || mobileMenuOpen} style={{ display: 'flex', '@media (min-width: 961px)': { display: 'none' } }}>
-                {mobileMenuOpen ? <IoCloseOutline /> : <RxHamburgerMenu />}
-             </IconBtn>
-          </div>
+          <MobileMenuToggle>
+            <IconBtn onClick={toggleMobileMenu} $scrolled={scrolled || mobileMenuOpen}>
+              {mobileMenuOpen ? <IoCloseOutline /> : <RxHamburgerMenu />}
+            </IconBtn>
+          </MobileMenuToggle>
 
         </div>
       </NavWrapper>
