@@ -11,23 +11,21 @@ function VolumetricFog() {
   const groupRef = useRef();
 
   return (
-    <group ref={groupRef} position={[0, -2, 0]}> {/* 稍微下沉一点，让烟雾有种从下往上升腾的感觉 */}
+    <group ref={groupRef} position={[0, -2, 0]}>
       <Clouds material={THREE.MeshStandardMaterial} limit={200} range={200}>
         
-        {/* 左边的粉色云雾 */}
         <Cloud 
-          seed={1}       // 随机种子
-          fade={10}      // 边缘淡出距离，越大越柔和
-          speed={0.1}    // 粒子内部扰动速度
-          growth={4}     // 粒子大小
-          volume={6}     // 体积密度
-          opacity={0.3}  // 透明度
-          bounds={[6, 2, 1]} // 限制在长方体区域内分布
-          color="hotpink" // 樱花粉
+          seed={1}
+          fade={10}
+          speed={0.1}
+          growth={4}
+          volume={6}
+          opacity={0.3}
+          bounds={[6, 2, 1]}
+          color="hotpink"
           position={[-4, 0, -2]} 
         />
 
-        {/* 右边的淡蓝色云雾 - 形成冷暖对比 */}
         <Cloud 
           seed={2} 
           fade={15} 
@@ -36,11 +34,10 @@ function VolumetricFog() {
           volume={8} 
           opacity={0.2} 
           bounds={[6, 2, 1]} 
-          color="blue" // 雾霾蓝
+          color="blue"
           position={[4, 1, -3]} 
         />
         
-        {/* 中心的亮白光晕 - 增加层次感 */}
         <Cloud 
           seed={3} 
           fade={20} 
