@@ -6,7 +6,7 @@ pipeline {
         SSH_CRED_ID = 'namecheap-ssh-key' 
         // Namecheap server details
         REMOTE_USER = 'charkukk'
-        REMOTE_HOST = 'charlesrealm.com'
+        REMOTE_HOST = '162.213.253.52'
         REMOTE_PORT = '21098'
         REMOTE_DIR = '/home/charkukk/public_html/'
         SUB_FOLDER = 'react-portfolio'
