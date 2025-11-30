@@ -34,12 +34,13 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: env.SSH_CRED_ID, keyFileVariable: 'SSH_KEY_FILE')]) {
                     // Windows PowerShell 脚本
                     // 注意：$env:SSH_KEY_FILE 是读取 Jenkins 生成的临时密钥文件路径
-                    powershell """
-                        Write-Host "Deploying to ${REMOTE_HOST}..."
+                    bat """
+                        @echo off
+                        echo Deploying to %REMOTE_HOST%...
                         
-                        scp -P ${REMOTE_PORT} -i $env:SSH_KEY_FILE -o StrictHostKeyChecking=no -r ./${SUB_FOLDER}/build/* ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}
+                        scp -o BatchMode=yes -o StrictHostKeyChecking=no -P %REMOTE_PORT% -i "%SSH_KEY_FILE%" -r ./%SUB_FOLDER%/build/* %REMOTE_USER%@%REMOTE_HOST%:%REMOTE_DIR%
                         
-                        Write-Host "Deployment Complete!"
+                        echo Deployment Complete!
                     """
                 }
             }
