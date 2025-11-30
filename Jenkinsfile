@@ -28,16 +28,18 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sshagent (credentials: [SSH_CRED_ID]) {
-                    // Windows 下不能用 sh，要用 powershell 或 bat
-                    // Windows 下没有 rsync，最简单是用 scp (Secure Copy)
-                    // 注意：HostKeyChecking=no 是为了跳过第一次连接的 yes/no 询问
-                    
-                    // 这里的写法是：把当前目录的所有内容 (*) 拷贝到远程目录
-                    // -P (大写) 是 scp 指定端口的参数 (ssh 是小写 -p)
-                    // -r 代表递归拷贝 (文件夹)
+                // 【核心修改】
+                // 不再使用 sshagent {} 插件
+                // 改用 withCredentials，它会把私钥临时存为一个文件，路径保存在 SSH_KEY_FILE 变量里
+                withCredentials([sshUserPrivateKey(credentialsId: env.SSH_CRED_ID, keyFileVariable: 'SSH_KEY_FILE')]) {
+                    // Windows PowerShell 脚本
+                    // 注意：$env:SSH_KEY_FILE 是读取 Jenkins 生成的临时密钥文件路径
                     powershell """
-                        scp -P ${REMOTE_PORT} -o StrictHostKeyChecking=no -r ./${SUB_FOLDER}/build/* ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}
+                        Write-Host "Deploying to ${REMOTE_HOST}..."
+                        
+                        scp -P ${REMOTE_PORT} -i $env:SSH_KEY_FILE -o StrictHostKeyChecking=no -r ./${SUB_FOLDER}/build/* ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}
+                        
+                        Write-Host "Deployment Complete!"
                     """
                 }
             }
