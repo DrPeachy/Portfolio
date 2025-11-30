@@ -12,7 +12,7 @@ function VolumetricFog() {
 
   return (
     <group ref={groupRef} position={[0, -2, 0]}>
-      <Clouds material={THREE.MeshStandardMaterial} limit={200} range={200}>
+      <Clouds limit={200} range={200}>
         
         <Cloud 
           seed={1}
