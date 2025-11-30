@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Environment, Lightformer, Clouds, Cloud } from '@react-three/drei';
-import { EffectComposer, Bloom, ToneMapping, ChromaticAberration } from '@react-three/postprocessing';
+import { BlendFunction } from 'postprocessing';
+import { EffectComposer, Bloom, ToneMapping, ChromaticAberration, Outline, Selection, Select } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
+import PulsingOutline from './PulsingOutline';
 
 // === 1. Volumetric Fog Component (NEW) ===
 // 这是一个独立的烟雾组件，使用 GPU Instancing 技术，性能极高
@@ -114,16 +116,18 @@ const GeometryShape = ({ yOffset, initialAngle, color, geometryType, materialTyp
 
   return (
     <Float speed={2} rotationIntensity={1} floatIntensity={0.5} floatingRange={[-0.2, 0.2]}>
-      <mesh 
-        ref={meshRef} 
-        position={[radiusX * Math.cos(initialAngle), yOffset, radiusZ * Math.sin(initialAngle)]}
-        castShadow receiveShadow
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
-      >
-        <Geometry />
-        <Material />
-      </mesh>
+      <Select enabled>
+        <mesh 
+          ref={meshRef} 
+          position={[radiusX * Math.cos(initialAngle), yOffset, radiusZ * Math.sin(initialAngle)]}
+          castShadow receiveShadow
+          onPointerOver={() => setHover(true)}
+          onPointerOut={() => setHover(false)}
+        >
+          <Geometry />
+          <Material />
+        </mesh>
+      </Select>
     </Float>
   );
 };
@@ -158,38 +162,46 @@ const ThreeBackground = () => {
         eventSource={document.getElementById('root')}
         eventPrefix="client"
       >
-        {/* 环境光保留，照亮几何体 */}
-        <ambientLight intensity={0.5} color="#ffffff" />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={5} castShadow />
+        <Selection>
+          {/* 环境光保留，照亮几何体 */}
+          <ambientLight intensity={0.5} color="#ffffff" />
+          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={5} castShadow />
 
-        {/* === 核心新增：体积雾 === */}
-        {/* 把它放在几何体之前渲染，或者之后都可以，因为有深度测试。放在这里管理方便 */}
-        <VolumetricFog />
+          {/* === 核心新增：体积雾 === */}
+          {/* 把它放在几何体之前渲染，或者之后都可以，因为有深度测试。放在这里管理方便 */}
+          <VolumetricFog />
 
-        {/* === SCENE OBJECTS === */}
-        <GeometryShape initialAngle={0} yOffset={1.2} color="#3798ff" geometryType="torus" materialType="rubber" />
-        <GeometryShape initialAngle={Math.PI * 0.5} yOffset={-1} color="#ff3798" geometryType="icosahedron" materialType="glass" />
-        <GeometryShape initialAngle={Math.PI} yOffset={-2} color="#ffbcf7" geometryType="octahedron" materialType="glass" />
-        <GeometryShape initialAngle={Math.PI * 1.5} yOffset={2} color="#ffffff" geometryType="capsule" materialType="rubber" />
+          {/* === SCENE OBJECTS === */}
+          <GeometryShape initialAngle={0} yOffset={1.2} color="#3798ff" geometryType="torus" materialType="rubber" />
+          <GeometryShape initialAngle={Math.PI * 0.5} yOffset={-1} color="#ff3798" geometryType="icosahedron" materialType="glass" />
+          <GeometryShape initialAngle={Math.PI} yOffset={-2} color="#ffbcf7" geometryType="octahedron" materialType="glass" />
+          <GeometryShape initialAngle={Math.PI * 1.5} yOffset={2} color="#ffffff" geometryType="capsule" materialType="rubber" />
 
-        <Environment resolution={512}>
-          <group rotation={[-Math.PI / 3, 0, 1]}>
-            <Lightformer form="circle" intensity={10} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={2} />
-            <Lightformer form="circle" intensity={2} rotation-y={Math.PI / 2} position={[-5, 1, -1]} scale={2} />
-            <Lightformer form="circle" intensity={2} rotation-y={Math.PI / 2} position={[-5, -1, -1]} scale={2} />
-            <Lightformer form="circle" intensity={2} rotation-y={-Math.PI / 2} position={[10, 1, 0]} scale={8} />
-            <Lightformer form="ring" color="#4060ff" intensity={10} onUpdate={(self) => self.lookAt(0, 0, 0)} position={[10, 10, 0]} scale={10} />
-          </group>
-        </Environment>
+          <Environment resolution={512}>
+            <group rotation={[-Math.PI / 3, 0, 1]}>
+              <Lightformer form="circle" intensity={10} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={2} />
+              <Lightformer form="circle" intensity={2} rotation-y={Math.PI / 2} position={[-5, 1, -1]} scale={2} />
+              <Lightformer form="circle" intensity={2} rotation-y={Math.PI / 2} position={[-5, -1, -1]} scale={2} />
+              <Lightformer form="circle" intensity={2} rotation-y={-Math.PI / 2} position={[10, 1, 0]} scale={8} />
+              <Lightformer form="ring" color="#4060ff" intensity={10} onUpdate={(self) => self.lookAt(0, 0, 0)} position={[10, 10, 0]} scale={10} />
+            </group>
+          </Environment>
 
-        <EffectComposer disableNormalPass>
-          {/* 稍微加强 Bloom，让烟雾有种发光感 */}
-          <Bloom luminanceThreshold={1} mipmapBlur intensity={0.8} radius={0.5} />
-          <ToneMapping />
-          <ChromaticAberration offset={[0.0005, 0.0005]} /> 
-        </EffectComposer>
+          <EffectComposer disableNormalPass autoClear={false} multisampling={8}>
+            {/* <Outline visibleEdgeColor="white" hiddenEdgeColor="white" blur={true} width={1000} edgeStrength={2} /> */}
+            <PulsingOutline 
+               visibleEdgeColor="rgba(191, 255, 255, 1)" 
+               hiddenEdgeColor="rgba(255, 161, 255, 1)" 
+               pulseSpeed={4} 
+            />
+            {/* 稍微加强 Bloom，让烟雾有种发光感 */}
+            <Bloom luminanceThreshold={1} mipmapBlur intensity={0.8} radius={0.5} />
+            <ToneMapping />
+            <ChromaticAberration offset={[0.0005, 0.0005]} /> 
+          </EffectComposer>
 
-        <Rig />
+          <Rig />
+        </Selection>
       </Canvas>
     </div>
   );
