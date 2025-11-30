@@ -52,7 +52,7 @@ pipeline {
                         
                         ssh -o BatchMode=yes -o StrictHostKeyChecking=no -p %REMOTE_PORT% -i "%SSH_KEY_FILE%" %REMOTE_USER%@%REMOTE_HOST% "find ~/public_html -type d -exec chmod 755 {} \\; && find ~/public_html -type f -exec chmod 644 {} \\;"
                         
-                        echo Deployment & Permissions Fix Complete!
+                        echo Deployment and Permissions Fix Complete!
                     """
                 }
             }
