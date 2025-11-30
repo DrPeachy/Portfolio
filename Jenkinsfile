@@ -38,9 +38,21 @@ pipeline {
                         @echo off
                         echo Deploying to %REMOTE_HOST%...
                         
-                        scp -o BatchMode=yes -o StrictHostKeyChecking=no -P %REMOTE_PORT% -i "%SSH_KEY_FILE%" -r ./%SUB_FOLDER%/build/* %REMOTE_USER%@%REMOTE_HOST%:%REMOTE_DIR%
+                        REM 1. 进入构建目录
+                        cd %SUB_FOLDER%\\build
                         
-                        echo Deployment Complete!
+                        REM 2. 上传文件 (scp)
+                        scp -o BatchMode=yes -o StrictHostKeyChecking=no -P %REMOTE_PORT% -i "%SSH_KEY_FILE%" -r . %REMOTE_USER%@%REMOTE_HOST%:%REMOTE_DIR%/
+                        
+                        echo Upload Complete. Fixing permissions...
+                        
+                        REM 3. 【新增】远程执行修复权限命令 (ssh)
+                        REM 这条命令会登录服务器，把文件夹设为 755，把文件设为 644
+                        REM 注意：一条长命令搞定所有，不用担心新文件了
+                        
+                        ssh -o BatchMode=yes -o StrictHostKeyChecking=no -p %REMOTE_PORT% -i "%SSH_KEY_FILE%" %REMOTE_USER%@%REMOTE_HOST% "find ~/public_html -type d -exec chmod 755 {} \\; && find ~/public_html -type f -exec chmod 644 {} \\;"
+                        
+                        echo Deployment & Permissions Fix Complete!
                     """
                 }
             }
