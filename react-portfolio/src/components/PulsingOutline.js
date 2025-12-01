@@ -11,14 +11,14 @@ import { BlendFunction, KernelSize } from 'postprocessing';
  */
 const PulsingOutline = ({
   // 可配置参数及其默认值
-  visibleEdgeColor = '#00ffff', // 可见边缘颜色 (默认青色)
-  hiddenEdgeColor = '#ff00ff',  // 遮挡边缘颜色 (默认洋红)
+  visibleEdgeColor = 'rgba(255, 85, 0, 1)', // 可见边缘颜色 (默认青色)
+  hiddenEdgeColor = 'rgba(255, 0, 255, 1)',  // 遮挡边缘颜色 (默认洋红)
   pulseSpeed = 3,               // 呼吸速度
-  edgeStrengthBase = 12,         // 基础强度
-  edgeStrengthRange = 8,        // 呼吸波动范围 (强度会在 Base ± Range 之间跳动)
-  width = 400,                   // 描边宽度
+  edgeStrengthBase = 10,         // 基础强度
+  edgeStrengthRange = 5,        // 呼吸波动范围 (强度会在 Base ± Range 之间跳动)
+  width = undefined,                   // 描边宽度
   blur = true,                  // 是否模糊
-  kernelSize = KernelSize.LARGE, // 模糊质量
+  kernelSize = KernelSize.MEDIUM, // 模糊质量
   ...props                      // 允许传入其他 Outline 的原生 props
 }) => {
   const outlineRef = useRef();

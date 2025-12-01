@@ -190,8 +190,8 @@ const ThreeBackground = () => {
           <EffectComposer disableNormalPass autoClear={false} multisampling={8}>
             {/* <Outline visibleEdgeColor="white" hiddenEdgeColor="white" blur={true} width={1000} edgeStrength={2} /> */}
             <PulsingOutline 
-               visibleEdgeColor="rgba(191, 255, 255, 1)" 
-               hiddenEdgeColor="rgba(255, 161, 255, 1)" 
+               visibleEdgeColor="rgba(0, 255, 255, 1)" 
+               hiddenEdgeColor="rgba(255, 0, 255, 1)" 
                pulseSpeed={4} 
             />
             {/* 稍微加强 Bloom，让烟雾有种发光感 */}
