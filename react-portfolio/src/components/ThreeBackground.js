@@ -1,138 +1,64 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Environment, Lightformer, Clouds, Cloud } from '@react-three/drei';
-import { BlendFunction } from 'postprocessing';
-import { EffectComposer, Bloom, ToneMapping, ChromaticAberration, Outline, Selection, Select } from '@react-three/postprocessing';
+import { Float, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
-import PulsingOutline from './PulsingOutline';
 
-// === 1. Volumetric Fog Component (NEW) ===
-// 这是一个独立的烟雾组件，使用 GPU Instancing 技术，性能极高
-function VolumetricFog() {
-  const groupRef = useRef();
-
-  return (
-    <group ref={groupRef} position={[0, -2, 0]}>
-      <Clouds material={THREE.MeshStandardMaterial} limit={200} range={200}>
-        
-        <Cloud 
-          seed={1}
-          fade={10}
-          speed={0.1}
-          growth={4}
-          volume={6}
-          opacity={0.3}
-          bounds={[6, 2, 1]}
-          color="hotpink"
-          position={[-4, 0, -2]} 
-        />
-
-        <Cloud 
-          seed={2} 
-          fade={15} 
-          speed={0.1} 
-          growth={5} 
-          volume={8} 
-          opacity={0.2} 
-          bounds={[6, 2, 1]} 
-          color="blue"
-          position={[4, 1, -3]} 
-        />
-        
-        <Cloud 
-          seed={3} 
-          fade={20} 
-          speed={0.05} 
-          growth={6} 
-          volume={3} 
-          opacity={0.5} 
-          bounds={[10, 10, 10]} 
-          color="white" 
-          position={[0, 0, -5]} 
-        />
-      </Clouds>
-    </group>
-  );
-}
-
-// === 2. Geometry Component (Unchanged) ===
-const GeometryShape = ({ yOffset, initialAngle, color, geometryType, materialType = 'rubber' }) => {
+// Geometry component with a unified, clean aesthetic
+const CleanGeometry = ({ position, color, geometryType, scale = 1, speed = 1 }) => {
   const meshRef = useRef();
   const [hovered, setHover] = useState(false);
-  const radiusX = 4.5; 
-  const radiusZ = 1.5;
-  const rotateFactor = 0.2;
 
   useFrame((state, delta) => {
-    const fixedDelta = Math.min(delta, 0.1); // 限制最大 delta，防止帧率骤降时动画跳动
+    // Prevent massive jumps in animation if frame rate drops
+    const fixedDelta = Math.min(delta, 0.1); 
     
     if (meshRef.current) {
-      meshRef.current.rotation.x += fixedDelta * 0.1;
-      meshRef.current.rotation.y += fixedDelta * 0.15;
+      meshRef.current.rotation.x += fixedDelta * 0.2 * speed;
+      meshRef.current.rotation.y += fixedDelta * 0.3 * speed;
       
-      const mouseX = state.pointer.x;
-      const mouseY = state.pointer.y;
-      meshRef.current.rotation.x += (mouseY * 0.1 - meshRef.current.rotation.x) * 0.05;
-      meshRef.current.rotation.y += (mouseX * 0.1 - meshRef.current.rotation.y) * 0.05;
-
-      const targetScale = hovered ? 1.2 : 1.0;
+      // Smooth scale transition on hover
+      const targetScale = hovered ? scale * 1.1 : scale;
       meshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
-
-      const scrollProgress = window.scrollY / window.innerHeight * rotateFactor;
-      const angle = -(scrollProgress * Math.PI * 2) + initialAngle;
-      
-      const targetX = radiusX * Math.cos(angle);
-      const targetZ = radiusZ * Math.sin(angle);
-      
-      meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, targetX, 0.05);
-      meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, targetZ, 0.05);
-      meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, yOffset, 0.05);
     }
   });
 
+  // Keep shapes simple and geometric
   const Geometry = () => {
     switch (geometryType) {
-      case 'torus': return <torusGeometry args={[0.8, 0.3, 64, 128]} />;
-      case 'icosahedron': return <icosahedronGeometry args={[0.8, 0]} />;
-      case 'capsule': return <capsuleGeometry args={[0.4, 1, 5, 16]} />;
-      default: return <octahedronGeometry args={[0.8, 0]} />;
+      case 'torus': return <torusGeometry args={[1, 0.3, 64, 128]} />;
+      case 'icosahedron': return <icosahedronGeometry args={[1, 0]} />;
+      case 'capsule': return <capsuleGeometry args={[0.5, 1, 32, 32]} />;
+      default: return <sphereGeometry args={[1, 64, 64]} />;
     }
-  };
-
-  const Material = () => {
-    if (materialType === 'glass') {
-      return (
-        <meshPhysicalMaterial 
-          color={color} 
-          roughness={0.05} metalness={0.1} transmission={0} thickness={0} clearcoat={1} envMapIntensity={2}     
-        />
-      );
-    }
-    return (
-      <meshStandardMaterial color={color} roughness={0.2} metalness={0.1} envMapIntensity={1.5} />
-    );
   };
 
   return (
-    <Float speed={2} rotationIntensity={1} floatIntensity={0.5} floatingRange={[-0.2, 0.2]}>
-      <Select enabled>
-        <mesh 
-          ref={meshRef} 
-          position={[radiusX * Math.cos(initialAngle), yOffset, radiusZ * Math.sin(initialAngle)]}
-          castShadow receiveShadow
-          onPointerOver={() => setHover(true)}
-          onPointerOut={() => setHover(false)}
-        >
-          <Geometry />
-          <Material />
-        </mesh>
-      </Select>
+    <Float speed={2 * speed} rotationIntensity={0.5} floatIntensity={1} floatingRange={[-0.2, 0.2]}>
+      <mesh 
+        ref={meshRef} 
+        position={position}
+        onPointerOver={() => setHover(true)}
+        onPointerOut={() => setHover(false)}
+      >
+        <Geometry />
+        {/* Premium Frosted Glass Material */}
+        <meshPhysicalMaterial 
+          color={color}
+          transmission={0.9} 
+          opacity={1}
+          metalness={0.1}
+          roughness={0.15}
+          ior={1.5}
+          thickness={0.5}
+          envMapIntensity={1.2}
+        />
+      </mesh>
     </Float>
   );
 };
 
-// === 3. Camera Rig (Unchanged) ===
+// Camera Rig for subtle mouse parallax
 const Rig = () => {
   useFrame((state) => {
     state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.pointer.x * 0.5, 0.05);
@@ -149,59 +75,35 @@ const ThreeBackground = () => {
   return (
     <div style={{ 
       position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -5, pointerEvents: 'none',
-      // 这里可以放一个很浅的底色，防止空隙漏出黑色，但主要视觉由 VolumetricFog 承担
-      background: '#fff1fdff', 
-      filter: isHome ? 'none' : 'blur(10px) brightness(1)',
+      // Strict adherence to your theme's background color
+      background: '#f2f2f2', 
+      filter: isHome ? 'none' : 'blur(12px) opacity(0.6)',
       transition: 'filter 0.8s ease-in-out',
     }}>
       <Canvas 
-        shadows 
-        dpr={[1, 1.5]} 
-        gl={{ antialias: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
+        dpr={[1, 2]} 
         camera={{ position: [0, 0, 8], fov: 45 }}
         eventSource={document.getElementById('root')}
         eventPrefix="client"
       >
-        <Selection>
-          {/* 环境光保留，照亮几何体 */}
-          <ambientLight intensity={0.5} color="#ffffff" />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={5} castShadow />
+        {/* Clean, soft lighting */}
+        <ambientLight intensity={0.8} color="#ffffff" />
+        <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
 
-          {/* === 核心新增：体积雾 === */}
-          {/* 把它放在几何体之前渲染，或者之后都可以，因为有深度测试。放在这里管理方便 */}
-          <VolumetricFog />
+        {/* Scene Objects: 
+          Using exactly your theme colors: Primary (Electric Blue), Secondary (Light Blue), and White
+        */}
+        <CleanGeometry position={[-3.5, 1, 0]} color="#3798ff" geometryType="torus" scale={1.2} speed={0.8} />
+        <CleanGeometry position={[3.5, -1, -2]} color="#a8d2ff" geometryType="icosahedron" scale={1.5} speed={0.5} />
+        <CleanGeometry position={[0, 2.5, -4]} color="#ffffff" geometryType="sphere" scale={1} speed={1.2} />
+        
+        {/* Ground the scene with very soft, subtle shadows at the bottom */}
+        <ContactShadows position={[0, -3.5, 0]} opacity={0.3} scale={20} blur={2.5} far={4} color="#111111" />
 
-          {/* === SCENE OBJECTS === */}
-          <GeometryShape initialAngle={0} yOffset={1.2} color="#3798ff" geometryType="torus" materialType="rubber" />
-          <GeometryShape initialAngle={Math.PI * 0.5} yOffset={-1} color="#ff3798" geometryType="icosahedron" materialType="glass" />
-          <GeometryShape initialAngle={Math.PI} yOffset={-2} color="#ffbcf7" geometryType="octahedron" materialType="glass" />
-          <GeometryShape initialAngle={Math.PI * 1.5} yOffset={2} color="#ffffff" geometryType="capsule" materialType="rubber" />
+        {/* Environment map is required for the glass transmission to reflect light properly */}
+        <Environment preset="city" />
 
-          <Environment resolution={512}>
-            <group rotation={[-Math.PI / 3, 0, 1]}>
-              <Lightformer form="circle" intensity={10} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={2} />
-              <Lightformer form="circle" intensity={2} rotation-y={Math.PI / 2} position={[-5, 1, -1]} scale={2} />
-              <Lightformer form="circle" intensity={2} rotation-y={Math.PI / 2} position={[-5, -1, -1]} scale={2} />
-              <Lightformer form="circle" intensity={2} rotation-y={-Math.PI / 2} position={[10, 1, 0]} scale={8} />
-              <Lightformer form="ring" color="#4060ff" intensity={10} onUpdate={(self) => self.lookAt(0, 0, 0)} position={[10, 10, 0]} scale={10} />
-            </group>
-          </Environment>
-
-          <EffectComposer disableNormalPass autoClear={false} multisampling={8}>
-            {/* <Outline visibleEdgeColor="white" hiddenEdgeColor="white" blur={true} width={1000} edgeStrength={2} /> */}
-            <PulsingOutline 
-               visibleEdgeColor="rgba(0, 255, 255, 1)" 
-               hiddenEdgeColor="rgba(255, 0, 255, 1)" 
-               pulseSpeed={4} 
-            />
-            {/* 稍微加强 Bloom，让烟雾有种发光感 */}
-            <Bloom luminanceThreshold={1} mipmapBlur intensity={0.8} radius={0.5} />
-            <ToneMapping />
-            <ChromaticAberration offset={[0.0005, 0.0005]} /> 
-          </EffectComposer>
-
-          <Rig />
-        </Selection>
+        <Rig />
       </Canvas>
     </div>
   );
