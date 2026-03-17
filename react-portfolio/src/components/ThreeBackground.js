@@ -1,73 +1,148 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
 
-// Geometry component with a unified, clean aesthetic
-const CleanGeometry = ({ position, color, geometryType, scale = 1, speed = 1 }) => {
-  const meshRef = useRef();
-  const [hovered, setHover] = useState(false);
+// === 1. Shader Code ===
+const vertexShader = `
+  uniform float uTime;
+  uniform vec2 uMouse;
+  varying vec2 vUv;
+  varying float vElevation;
 
-  useFrame((state, delta) => {
-    // Prevent massive jumps in animation if frame rate drops
-    const fixedDelta = Math.min(delta, 0.1); 
+  // Simple 2D Hash function
+  float hash(vec2 p) {
+      return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+  }
+
+  // 2D Value Noise function
+  float noise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+                 mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+  }
+
+  // Fractional Brownian Motion (fBm)
+  float fbm(vec2 p) {
+      float value = 0.0;
+      float amplitude = 0.5;
+      for (int i = 0; i < 4; i++) {
+          value += amplitude * noise(p);
+          p *= 2.0;
+          amplitude *= 0.5;
+      }
+      return value;
+  }
+
+  void main() {
+    vUv = uv;
     
-    if (meshRef.current) {
-      meshRef.current.rotation.x += fixedDelta * 0.2 * speed;
-      meshRef.current.rotation.y += fixedDelta * 0.3 * speed;
+    vec2 noiseCoord = uv * 6.0; 
+    
+    // 计算局部空间的基础高度
+    float elevation = fbm(noiseCoord + uTime * 0.1);
+    
+    // 鼠标交互推高地形
+    float dist = distance(uv, uMouse);
+    float mouseEffect = smoothstep(0.4, 0.0, dist) * 0.1; 
+    
+    elevation += mouseEffect;
+    vElevation = elevation; // vElevation 记录的是纯粹的 Mesh Space 高度比例
+
+    vec3 newPosition = position;
+    newPosition.z += elevation * 4.0; // 实际 Z 轴位移
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+  }
+`;
+
+const fragmentShader = `
+  uniform vec3 uColorHigh; // 高处颜色 (电光蓝)
+  uniform vec3 uColorLow;  // 低处颜色 (浅蓝)
+  uniform vec3 uBgColor;
+  varying vec2 vUv;
+  varying float vElevation;
+
+  void main() {
+    float contourInterval = 15.0; 
+    
+    float val = vElevation * contourInterval;
+    float f = fract(val);
+    
+    float df = fwidth(val);
+    float lineThickness = 1.0; 
+    
+    float edge = smoothstep(df * lineThickness, 0.0, f) + smoothstep(1.0 - df * lineThickness, 1.0, f);
+    
+    // --- 新增：基于高度的颜色映射 ---
+    // 将 vElevation (大约在 0.0 到 1.0+ 之间) 映射为一个平滑的渐变系数
+    // 0.3 以下完全是低处颜色，0.7 以上完全是高处颜色，中间平滑过渡
+    float heightFactor = smoothstep(0.3, 0.7, vElevation);
+    
+    // 动态计算当前线条应该是什么颜色
+    vec3 currentLineColor = mix(uColorLow, uColorHigh, heightFactor);
+    
+    // 将背景色和动态线条色混合
+    vec3 finalColor = mix(uBgColor, currentLineColor, edge);
+    // ---------------------------------
+
+    // 边缘淡出遮罩
+    float fadeX = smoothstep(0.0, 0.1, vUv.x) * smoothstep(1.0, 0.9, vUv.x);
+    float fadeY = smoothstep(0.0, 0.1, vUv.y) * smoothstep(1.0, 0.9, vUv.y);
+    float alphaMask = fadeX * fadeY;
+    
+    finalColor = mix(uBgColor, finalColor, alphaMask);
+
+    gl_FragColor = vec4(finalColor, 1.0);
+
+    #include <colorspace_fragment>
+  }
+`;
+
+// === 2. Topographic Map Component ===
+const TopographicMap = () => {
+  const materialRef = useRef();
+  
+  // 更新 Uniforms，引入高低两种颜色
+  const uniforms = useMemo(() => ({
+    uTime: { value: 0 },
+    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+    uColorHigh: { value: new THREE.Color('#3798ff') }, // 主色：电光蓝 (山峰)
+    uColorLow: { value: new THREE.Color('#a8d2ff') },  // 副色：浅蓝 (山谷)
+    uBgColor: { value: new THREE.Color('#f2f2f2') }    // 背景色
+  }), []);
+
+  useFrame((state) => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTime.value = state.clock.elapsedTime * 0.5;
       
-      // Smooth scale transition on hover
-      const targetScale = hovered ? scale * 1.1 : scale;
-      meshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
+      const targetMouseX = state.pointer.x * 0.5 + 0.5;
+      const targetMouseY = state.pointer.y * 0.5 + 0.5;
+      
+      materialRef.current.uniforms.uMouse.value.lerp(
+        new THREE.Vector2(targetMouseX, targetMouseY),
+        0.05
+      );
     }
   });
 
-  // Keep shapes simple and geometric
-  const Geometry = () => {
-    switch (geometryType) {
-      case 'torus': return <torusGeometry args={[1, 0.3, 64, 128]} />;
-      case 'icosahedron': return <icosahedronGeometry args={[1, 0]} />;
-      case 'capsule': return <capsuleGeometry args={[0.5, 1, 32, 32]} />;
-      default: return <sphereGeometry args={[1, 64, 64]} />;
-    }
-  };
-
   return (
-    <Float speed={2 * speed} rotationIntensity={0.5} floatIntensity={1} floatingRange={[-0.2, 0.2]}>
-      <mesh 
-        ref={meshRef} 
-        position={position}
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
-      >
-        <Geometry />
-        {/* Premium Frosted Glass Material */}
-        <meshPhysicalMaterial 
-          color={color}
-          transmission={0.9} 
-          opacity={1}
-          metalness={0.1}
-          roughness={0.15}
-          ior={1.5}
-          thickness={0.5}
-          envMapIntensity={1.2}
-        />
-      </mesh>
-    </Float>
+    <mesh rotation={[-Math.PI * 0.25, 0, 0]} position={[0, -2, -5]}>
+      <planeGeometry args={[100, 100, 250, 250]} />
+      <shaderMaterial
+        ref={materialRef}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
+        transparent={true}
+      />
+    </mesh>
   );
 };
 
-// Camera Rig for subtle mouse parallax
-const Rig = () => {
-  useFrame((state) => {
-    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.pointer.x * 0.5, 0.05);
-    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.pointer.y * 0.5, 0.05);
-    state.camera.lookAt(0, 0, 0);
-  });
-  return null;
-};
-
+// === 3. Main Background Setup ===
 const ThreeBackground = () => {
   const location = useLocation();
   const isHome = location.pathname === '/';
@@ -75,35 +150,18 @@ const ThreeBackground = () => {
   return (
     <div style={{ 
       position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -5, pointerEvents: 'none',
-      // Strict adherence to your theme's background color
-      background: '#f2f2f2', 
-      filter: isHome ? 'none' : 'blur(12px) opacity(0.6)',
+      background: '#f2f2f2',
+      filter: isHome ? 'none' : 'blur(8px) opacity(0.8)',
       transition: 'filter 0.8s ease-in-out',
     }}>
       <Canvas 
+        flat
         dpr={[1, 2]} 
-        camera={{ position: [0, 0, 8], fov: 45 }}
+        camera={{ position: [0, 0, 10], fov: 60 }}
         eventSource={document.getElementById('root')}
         eventPrefix="client"
       >
-        {/* Clean, soft lighting */}
-        <ambientLight intensity={0.8} color="#ffffff" />
-        <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
-
-        {/* Scene Objects: 
-          Using exactly your theme colors: Primary (Electric Blue), Secondary (Light Blue), and White
-        */}
-        <CleanGeometry position={[-3.5, 1, 0]} color="#3798ff" geometryType="torus" scale={1.2} speed={0.8} />
-        <CleanGeometry position={[3.5, -1, -2]} color="#a8d2ff" geometryType="icosahedron" scale={1.5} speed={0.5} />
-        <CleanGeometry position={[0, 2.5, -4]} color="#ffffff" geometryType="sphere" scale={1} speed={1.2} />
-        
-        {/* Ground the scene with very soft, subtle shadows at the bottom */}
-        <ContactShadows position={[0, -3.5, 0]} opacity={0.3} scale={20} blur={2.5} far={4} color="#111111" />
-
-        {/* Environment map is required for the glass transmission to reflect light properly */}
-        <Environment preset="city" />
-
-        <Rig />
+        <TopographicMap />
       </Canvas>
     </div>
   );
