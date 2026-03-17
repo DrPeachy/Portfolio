@@ -37,6 +37,10 @@ pipeline {
                     bat """
                         @echo off
                         echo Deploying to %REMOTE_HOST%...
+
+                        echo Fixing local SSH key permissions...
+                        icacls "%SSH_KEY_FILE%" /inheritance:r
+                        icacls "%SSH_KEY_FILE%" /grant "%USERNAME%:R"
                         
                         REM 1. 进入构建目录
                         cd %SUB_FOLDER%\\build
