@@ -8,43 +8,76 @@ import { IoCloseOutline } from "react-icons/io5";
 
 // === 1. Styled Components (UI 骨架) ===
 
-// 导航栏外壳
 const NavWrapper = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  /* 高度单独控制，背景样式移交给了下方的 NavBackground */
+  height: ${props => props.$scrolled ? '60px' : '80px'};
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 ${props => props.theme.spacing.lg}; /* 使用 theme 间距 */
-  transition: all 0.4s ease;
-
-  /* 核心逻辑：滚动状态样式 */
-  /* 如果滚动了，应用深色半透明背景 + 毛玻璃 */
-  ${props => props.$scrolled && css`
-    background: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    height: 60px; /* 滚动后稍微变窄，更精致 */
-    box-shadow: ${props.theme.shadows.soft};
-  `}
+  padding: 0 ${props => props.theme.spacing.lg}; 
+  transition: height 0.4s ease, padding 0.4s ease; /* 只过渡高度和边距 */
 
   @media (max-width: 768px) {
     padding: 0 ${props => props.theme.spacing.md};
   }
 `;
 
-// Logo 样式
+// 🌟 新增：专门负责背景、毛玻璃和波浪遮罩的层
+const NavBackground = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* 高度比 NavWrapper 稍微多出 15px，让波浪“悬垂”在内容区下方，防止裁掉文字 */
+  height: calc(100% + 15px);
+  z-index: -1;
+  pointer-events: none; /* 关键：防止悬垂的 15px 挡住下方网页内容的点击 */
+  
+  background: ${props => props.$scrolled ? 'rgba(20, 20, 20, 0.35)' : 'transparent'};
+  backdrop-filter: ${props => props.$scrolled ? 'blur(12px)' : 'none'};
+  -webkit-backdrop-filter: ${props => props.$scrolled ? 'blur(12px)' : 'none'};
+  
+  /* 在被 Mask 切割的层上，不能用 box-shadow，必须用 drop-shadow filter 来生成跟随波浪形状的阴影 */
+  filter: ${props => props.$scrolled ? `drop-shadow(0 10px 15px rgba(0,0,0,0.3))` : 'none'};
+  transition: background 0.4s ease, backdrop-filter 0.4s ease, filter 0.4s ease;
+
+  /* === 动态波浪遮罩核心 === */
+  /* 使用内联 SVG 画出一个顶部平整、底部起伏的完美正弦波 */
+  mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L0,88 Q25,100 50,88 T100,88 L100,0 Z' fill='black'/%3E%3C/svg%3E");
+  mask-size: 800px 100%; /* 一个波浪的物理宽度设为 800px */
+  mask-repeat: repeat-x; /* 水平无限平铺 */
+  
+  -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L0,88 Q25,100 50,88 T100,88 L100,0 Z' fill='black'/%3E%3C/svg%3E");
+  -webkit-mask-size: 800px 100%;
+  -webkit-mask-repeat: repeat-x;
+
+  /* 动画：让 mask 的背景图持续向左滚动，刚好滚动一个 mask-size 的距离，形成完美无缝循环 */
+  animation: waveFlow 12s linear infinite;
+
+  @keyframes waveFlow {
+    0% {
+      mask-position: 0 0;
+      -webkit-mask-position: 0 0;
+    }
+    100% {
+      mask-position: -800px 0; /* 跟 mask-size 保持一致 */
+      -webkit-mask-position: -800px 0;
+    }
+  }
+`;
+
 const Logo = styled(Link)`
   font-family: ${props => props.theme.fonts.book};
   font-size: 1.5rem;
   color: ${props => props.$scrolled ? props.theme.colors.text.light : props.theme.colors.text.main};
   text-decoration: none;
   letter-spacing: 1px;
-  z-index: 1002; /* 保证在移动端菜单层之上 */
+  z-index: 1002;
   transition: color 0.3s ease;
 
   &:hover {
@@ -52,28 +85,22 @@ const Logo = styled(Link)`
   }
 `;
 
-// 桌面端菜单容器
 const DesktopMenu = styled.div`
   display: flex;
   gap: 40px;
   align-items: center;
-  
-  /* 核心修改：使用绝对定位 */
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 
-  /* 依然保留隐藏逻辑 */
   @media (max-width: 960px) {
     display: none; 
   }
 `;
 
-// 导航链接
 const NavItem = styled(Link)`
   font-family: ${props => props.theme.fonts.book};
   font-size: 0.9rem;
-  /* 顶部是深灰，滚动变白 */
   color: ${props => props.$scrolled ? '#e0e0e0' : props.theme.colors.text.secondary};
   text-decoration: none;
   text-transform: uppercase;
@@ -81,12 +108,10 @@ const NavItem = styled(Link)`
   position: relative;
   transition: color 0.3s ease;
 
-  /* 激活状态的高亮逻辑 (可选) */
   ${props => props.$active && css`
     color: ${props.theme.colors.primary};
   `}
 
-  /* 下划线动效 */
   &::after {
     content: '';
     position: absolute;
@@ -106,7 +131,6 @@ const NavItem = styled(Link)`
   }
 `;
 
-// 功能按钮 (语言切换/汉堡菜单)
 const IconBtn = styled.button`
   background: none;
   border: none;
@@ -124,7 +148,6 @@ const IconBtn = styled.button`
   }
 `;
 
-// === 移动端全屏菜单 (Mobile Overlay) ===
 const MobileMenuOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -140,7 +163,6 @@ const MobileMenuOverlay = styled.div`
   align-items: center;
   gap: 2rem;
   
-  /* 进场动画状态控制 */
   opacity: ${props => props.$isOpen ? 1 : 0};
   pointer-events: ${props => props.$isOpen ? 'all' : 'none'};
   transition: opacity 0.4s ease;
@@ -150,7 +172,6 @@ const MobileMenuToggle = styled.div`
   display: flex;
   align-items: center;
 
-  /* 在大于 960px 的屏幕（桌面端）隐藏 */
   @media (min-width: 961px) {
     display: none;
   }
@@ -171,40 +192,34 @@ const MobileNavLink = styled(Link)`
   }
 `;
 
-// === 2. Component Logic (逻辑实现) ===
+// === 2. Component Logic ===
 
 const MyNavbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
-  const location = useLocation(); // 获取当前路由，用于高亮当前页
+  const location = useLocation();
 
-  // 1. 滚动监听逻辑
   useEffect(() => {
     const handleScroll = () => {
-      // 超过 50px 就变色
       setScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 2. 语言切换
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === "en" ? "zh" : "en");
   };
 
-  // 3. 移动端菜单切换
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  // 点击链接后自动关闭移动端菜单
   const closeMenu = () => {
     setMobileMenuOpen(false);
   };
 
-  // 定义菜单项配置 (方便复用)
   const menuItems = [
     { path: '/me', label: t("navbar.about") },
     { path: '/game', label: t("navbar.game") },
@@ -215,48 +230,41 @@ const MyNavbar = () => {
 
   return (
     <>
-      {/* 导航栏主体 */}
       <NavWrapper $scrolled={scrolled || mobileMenuOpen}> 
-        {/* 如果菜单打开了，也要保持深色背景，保证 Logo 可见 */}
         
-        {/* LOGO */}
+        {/* 🌟 背景渲染层：将波浪动画放置在底层 */}
+        <NavBackground $scrolled={scrolled || mobileMenuOpen} />
+
         <Logo to="/" $scrolled={scrolled || mobileMenuOpen} onClick={closeMenu}>
           Charles' Realm
         </Logo>
 
-        {/* 桌面端菜单 (Mobile 隐藏) */}
         <DesktopMenu>
           {menuItems.map((item) => (
             <NavItem 
               key={item.path} 
               to={item.path} 
-              $scrolled={scrolled}
-              $active={location.pathname === item.path} // 判断是否激活
+              $scrolled={scrolled || mobileMenuOpen}
+              $active={location.pathname === item.path} 
             >
               {item.label}
             </NavItem>
           ))}
         </DesktopMenu>
 
-        {/* 右侧功能区 */}
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          
-          {/* 语言切换 */}
           <IconBtn onClick={toggleLanguage} $scrolled={scrolled || mobileMenuOpen}>
             <HiMiniLanguage />
           </IconBtn>
 
-          {/* 移动端汉堡按钮 (Desktop 隐藏) */}
           <MobileMenuToggle>
             <IconBtn onClick={toggleMobileMenu} $scrolled={scrolled || mobileMenuOpen}>
               {mobileMenuOpen ? <IoCloseOutline /> : <RxHamburgerMenu />}
             </IconBtn>
           </MobileMenuToggle>
-
         </div>
       </NavWrapper>
 
-      {/* 移动端全屏菜单 Overlay */}
       <MobileMenuOverlay $isOpen={mobileMenuOpen}>
         {menuItems.map((item) => (
           <MobileNavLink key={item.path} to={item.path} onClick={closeMenu}>
@@ -267,9 +275,5 @@ const MyNavbar = () => {
     </>
   );
 };
-
-// 补一个小的 Style Fix，因为我们移除了 d-md-none
-// 你可以在 IconBtn 的父级 div 上直接加这个内联样式，或者用 styled component 控制显示隐藏
-// 这里我在代码里做了处理，但为了严谨，建议把 IconBtn 包裹在一个 styled component 里控制显示
 
 export default MyNavbar;
