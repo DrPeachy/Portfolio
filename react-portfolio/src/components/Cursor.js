@@ -19,11 +19,11 @@ const MainDot = styled.div`
   left: 0;
   width: 8px;
   height: 8px;
-  background-color: ${props => props.theme.colors.primary};
+  background-color: ${(props) => props.theme.colors.primary};
   border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 `;
 
 // 2. 跟随大圆圈
@@ -33,7 +33,7 @@ const Ring = styled.div`
   left: 0;
   width: 40px;
   height: 40px;
-  border: 1.5px solid ${props => props.theme.colors.primary};
+  border: 1.5px solid ${(props) => props.theme.colors.primary};
   border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -42,9 +42,24 @@ const Ring = styled.div`
 
 const Cursor = () => {
   const theme = useTheme();
+
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  useEffect(() => {
+    // mobile check
+    const checkIsTouch = () => {
+      return (
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia("(hover: none)").matches
+      );
+    };
+
+    setIsTouchDevice(checkIsTouch());
+  }, []);
+
   const mainDot = useRef(null);
   const ring = useRef(null);
-  
+
   // 坐标记录
   const mousePos = useRef({ x: -100, y: -100 }); // 初始移出屏幕外
   const ringPos = useRef({ x: -100, y: -100 });
@@ -74,7 +89,7 @@ const Cursor = () => {
       gsap.set(ring.current, { x: ringPos.current.x, y: ringPos.current.y });
       requestAnimationFrame(loop);
     };
-    
+
     const rafId = requestAnimationFrame(loop);
 
     return () => {
@@ -138,7 +153,6 @@ const Cursor = () => {
     // 统一执行动画，overwrite: true 确保之前的状态被完全覆盖
     gsap.to(dot, { ...targetDotState, duration: 0.3, overwrite: true });
     gsap.to(r, { ...targetRingState, duration: 0.3, overwrite: true });
-
   }, [isHovered, isClicked, theme]);
 
   // ========================================================
@@ -155,7 +169,9 @@ const Cursor = () => {
       if (isInteractive(e.target)) {
         setIsHovered(true);
         // 可选：强制设置 CSS cursor 避免系统光标闪烁
-        e.target.closest("a, button, input, textarea, .clickable-layer").style.cursor = 'none';
+        e.target.closest(
+          "a, button, input, textarea, .clickable-layer",
+        ).style.cursor = "none";
       }
     };
 
