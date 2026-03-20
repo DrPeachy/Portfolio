@@ -96,7 +96,13 @@ const Game = () => {
 
             {/* 右侧：标签区域 */}
             {/* 这里的 div 相当于原来的 Col，但因为 GridContainer 是 flex，它自然会占据位置 */}
-            <div style={{ width: '100%', maxWidth: '500px' }}> 
+            <div style={{ 
+              width: '100%', 
+              maxWidth: '500px', 
+              margin: '0 auto',
+              display: 'flex',
+              justifyContent: 'center'
+            }}>
               <FadeInScaleUpOnScroll start="top 80%">
                 <DraggableTags 
                   tags={gameInfo.tags} 
